@@ -1,0 +1,92 @@
+.Sidebar {
+  // background: red;
+  width: 265px;
+  height: 744px;
+  position: relative;
+  transition: transform 0.3s ease, opacity 0.2s, width 0.2s, height 0.2s,
+    box-shadow 0.2s;
+  opacity: 0;
+  box-shadow: 5px 5px 9px 1px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+
+  .header {
+    height: 35px;
+    margin: 0 auto;
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    // background-color: red;
+
+    .invisible-box {
+      visibility: hidden;
+      width: 50px;
+      height: inherit;
+    }
+
+    .detach-btn-wrapper {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      svg {
+        color: #7b7b7b;
+        transform: rotateZ(0deg);
+        transition: transform 0.3s;
+      }
+    }
+  }
+
+  &.isDetached {
+    transform: translateX(-265px);
+  }
+
+  &.isAttached {
+    height: 100%;
+    width: 300px;
+    box-shadow: 3px 3px 7px 1px rgba(0, 0, 0, 0.3);
+    
+    .detach-btn-wrapper svg { transform: rotateZ(180deg); }
+  }
+
+
+  &.isVisible {
+    transform: translateX(0px);
+    opacity: 100;
+
+    .hide-btn-container {
+      width: 25px;
+      right: -25px;
+    }
+  }
+
+  .hide-btn-container {
+    // background-color: green;
+    width: 150px;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    right: -150px;
+    transition: width 1s, right 1s;
+
+    .hide-btn {
+      border: 1px solid blue;
+      width: 25px;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-100%);
+      cursor: pointer;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      // clip-path: polygon(0 0, 40% 12%, 40% 82%, 0 100%);
+
+      .hide-icn {
+        height: 25px;
+      }
+    }
+  }
+}
