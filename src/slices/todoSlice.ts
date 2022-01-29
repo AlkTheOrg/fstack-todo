@@ -6,7 +6,7 @@ export const findTodoIndex: (todos: Todo[], id: string) => number = (
   id
 ) => todos.findIndex((todo) => todo.id === id);
 
-export type Todo = {
+export interface Todo {
   id: string;
   name: string;
   due: Date;
