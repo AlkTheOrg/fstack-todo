@@ -32,9 +32,9 @@ const Sidebar: FC<Props> = ({
   children,
 }): JSX.Element => {
   const [isDetached, setIsDetached] = useState(detached);
-  const [isVisible, setIsVisible] = useState(!isDetached);
   //TODO Uncomment below after finishing the design of siebar
-  // const [isVisible, setIsVisible] = useState(true);
+  // const [isVisible, setIsVisible] = useState(!isDetached);
+  const [isVisible, setIsVisible] = useState(true);
 
   const toggleDetach = () => setIsDetached((prev) => !prev); //TODO handle detach icon click
 
