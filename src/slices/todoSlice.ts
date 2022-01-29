@@ -9,7 +9,7 @@ export const findTodoIndex: (todos: Todo[], id: string) => number = (
 export type Todo = {
   id: string;
   name: string;
-  due: number;
+  due: Date;
   color: string;
   pageId: string;
 };
@@ -27,8 +27,8 @@ export type TodosState = {
 export const initialState: TodosState = {
   byPageId: {
     "0": [
-      { id: "0", name: "example0", color: "red", pageId: "0", due: Date.now() },
-      { id: "1", name: "example1", color: "yellow", pageId: "0", due: Date.now() },
+      { id: "0", name: "example0", color: "red", pageId: "0", due: new Date(Date.now()) },
+      { id: "1", name: "example1", color: "yellow", pageId: "0", due: new Date(Date.now()) },
     ],
   },
   curPageId: "",

@@ -12,12 +12,12 @@ import reducer, {
 } from "../todoSlice";
 
 const pageOneTodos = [
-  { id: "2", name: "example2", color: "green", pageId: "1", due: Date.now() },
-  { id: "3", name: "example3", color: "brown", pageId: "1", due: Date.now() },
+  { id: "2", name: "example2", color: "green", pageId: "1", due: new Date(Date.now()) },
+  { id: "3", name: "example3", color: "brown", pageId: "1", due: new Date(Date.now()) },
 ];
 const newTodo: Todo = {
   color: "red",
-  due: Date.now(),
+  due: new Date(Date.now()),
   id: "12",
   name: "do it",
   pageId: "0",
