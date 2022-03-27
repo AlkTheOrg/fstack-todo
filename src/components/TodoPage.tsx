@@ -4,25 +4,24 @@ import { FiSearch, FiMoreHorizontal, FiPlus } from "react-icons/fi";
 import { IconType } from "react-icons";
 import FilteredTodoList from "../containers/FilteredTodoList";
 import PopoverMenu from "./PopoverMenu";
-import { useDispatch } from "react-redux";
-import { sortByKey } from "../slices/todoSlice";
+import EditableText from "./EditableText";
+import { useDispatch, useSelector } from "react-redux";
+import { pageRenamed, sortByKey } from "../slices/todoSlice";
+import { RootState } from "../store";
 
 export type Props = {
-  title: string;
   SearchIcon?: IconType;
   NewTodoIcon?: IconType;
   MoreIcon?: IconType;
 };
 
 export const defaultProps: Props = {
-  title: "Sample Title",
   SearchIcon: FiSearch,
   NewTodoIcon: FiPlus,
   MoreIcon: FiMoreHorizontal,
 };
 
 export type TodoPageHeaderProps = {
-  title: string;
   SearchIcon: IconType;
   NewTodoIcon: IconType;
   MoreIcon: IconType;
@@ -32,7 +31,6 @@ export type TodoPageHeaderProps = {
 };
 
 export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
-  title,
   SearchIcon,
   NewTodoIcon,
   MoreIcon,
@@ -41,9 +39,18 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
   setShowPopover,
 }) => {
   const dispatch = useDispatch();
+  const curPageId = useSelector((state: RootState) => state.todo.curPageId)
+  const title = useSelector((state: RootState) => state.todo.pages[curPageId])
   return (
     <div className="TodoPage-header">
-      <h1>{title}</h1>
+      <EditableText
+        defaultValue={title}
+        wrapperClass="EditableText"
+        DefaultComponent={() => <h1 className="todo-title">{title}</h1>}
+        excludedClickOutsideClasses={['todo-title']}
+        onSubmit={(newName: string) => dispatch(pageRenamed([curPageId, newName]))}
+      />
+
       <div className="TodoPage-header-icons">
         <div className="icon-wrapper">
           <SearchIcon size={28} />
@@ -90,13 +97,12 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
   );
 };
 
-const TodoPage: FC<Props> = ({ title, SearchIcon, NewTodoIcon, MoreIcon }) => {
+const TodoPage: FC<Props> = ({ SearchIcon, NewTodoIcon, MoreIcon }) => {
   const [showNewTodoForm, setShowNewTodoForm] = useState(false);
   const [showPopover, setShowPopover] = useState(true);
   return (
     <div className="TodoPage">
       <TodoPageHeader
-        title={title}
         SearchIcon={SearchIcon || FiSearch}
         NewTodoIcon={NewTodoIcon || FiPlus}
         MoreIcon={MoreIcon || FiMoreHorizontal}

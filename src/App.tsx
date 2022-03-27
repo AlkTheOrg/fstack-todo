@@ -29,7 +29,7 @@ function App() {
         <Sidebar isDetached={true} classes={['Sidebar']}>
           <TodoPageList />
         </Sidebar>
-        <TodoPage title="groceries"/>
+        <TodoPage />
       </div>
     </div>
   );

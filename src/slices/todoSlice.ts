@@ -27,6 +27,7 @@ export type SortKey = {
 export type TodosState = {
   // byPageId: TodosByPageId;
   byPageId: Record<string, Todo[]>;
+  pages: Record<string, string>; // pageId: name
   curPageId: string;
   curEditingTodoId?: string;
 };
@@ -38,7 +39,10 @@ export const initialState: TodosState = {
       { id: "1", name: "example1", color: "yellow", pageId: "0", due: new Date(Date.now()) },
     ],
   },
-  curPageId: "",
+  pages: {
+    "0": "groceries"
+  },
+  curPageId: "0",
   curEditingTodoId: ""
 };
 
@@ -90,9 +94,14 @@ export const todoSlice = createSlice({
         let x = a[key]; let y = b[key];
         return ((x < y) ? val1 : ((x > y) ? val2 : 0));
       })
+    },
+    pageRenamed: (state, action: PayloadAction<[string, string]>) => {
+      const pageId = action.payload[0]
+      if (action.payload)
+        state.pages[pageId] = action.payload[1];
     }
   },
 });
 
-export const { setTodos, todoAdded, todoRemoved, todoUpdated, pageRemoved, setCurPage, setCurEditingTodoId, sortByKey } = todoSlice.actions;
+export const { setTodos, todoAdded, todoRemoved, todoUpdated, pageRemoved, setCurPage, setCurEditingTodoId, sortByKey, pageRenamed } = todoSlice.actions;
 export default todoSlice.reducer;
