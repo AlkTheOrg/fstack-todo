@@ -1,4 +1,4 @@
-import "../styles/TodoPageList.scss"
+import "../../styles/TodoPageList.scss"
 
 const TodoPageList = () => {
   return <div className='TodoPageList'></div>;

@@ -1,5 +1,5 @@
 import { fireEvent, prettyDOM, render, screen } from "@testing-library/react";
-import Sidebar, { Props, defaultProps } from "../Sidebar";
+import Sidebar, { Props, defaultProps } from "../side/Sidebar";
 
 describe("<Sidebar />", () => {
   const renderSidebar = (

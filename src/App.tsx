@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./store";
-import Sidebar from "./components/Sidebar";
-import TodoPageList from "./components/TodoPageList";
+import Sidebar from "./components/side/Sidebar";
+import TodoPageList from "./components/side/TodoPageList";
 import "./styles/reset.scss"
 import "./styles/App.scss"
 import Navbar from "./components/Navbar";

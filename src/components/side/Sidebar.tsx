@@ -1,8 +1,8 @@
 import React, { FC, useState, useEffect } from "react";
-import "../styles/Sidebar.scss";
+import "../../styles/Sidebar.scss";
 import { FaChevronLeft } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { combineClassNames } from "../util/combineClassNames";
+import { combineClassNames } from "../../util/combineClassNames";
 import { IconType } from "react-icons";
 
 export interface Props {
