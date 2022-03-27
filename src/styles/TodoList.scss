@@ -1,0 +1,10 @@
+.TodoList {
+  // background-color: lightpink;
+  height: calc(100% - 123px);
+  overflow-y: hidden;
+  padding-right: 10px;
+
+  &:hover {
+    overflow-y: auto;
+  }
+}

@@ -1,0 +1,46 @@
+.TodoPage {
+  // background-color: lightcoral;
+  width: 767px;
+  height: 820px;
+  margin-top: 67px;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  padding: 40px 36px 0px 32px;
+  box-shadow: -5px -4px 15px -3px rgba(0, 0, 0, 0.25);
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    // background-color: orchid;
+    height: 44px;
+    margin-bottom: 39px;
+    padding-right: 10px;
+
+    h1 {
+      font-size: 36px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    &-icons {
+      display: flex;
+
+      .icon-wrapper {
+        display: flex;
+        align-items: center;
+        padding-left: 25px;
+        
+        svg,
+        img {
+          cursor: pointer;
+          transform: scale(1);
+          transition: transform 0.1s;
+
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+  }
+}
