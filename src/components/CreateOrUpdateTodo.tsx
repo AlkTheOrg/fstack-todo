@@ -89,10 +89,6 @@ const CreateOrUpdateTodo: FC<Props> = ({
           // document.querySelector(`#todo-${curEditingTodoId} .edit-todo-icon`)
         ) {
           setShowTodoForm(false);
-          console.log(target);
-          console.log(target.parentElement);
-          console.log(`edit-${curEditingTodoId}`)
-          
           resetCurEditingTodoId();
         }
       }
@@ -125,6 +121,7 @@ const CreateOrUpdateTodo: FC<Props> = ({
         due: startDate,
         pageId: curPageId,
       });
+      resetCurEditingTodoId();
     }
     setShowTodoForm(false);
   };
