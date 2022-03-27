@@ -63,7 +63,7 @@ const EditableText: FC<Props> = ({
       editableWrapperRef.current.querySelector('input')?.focus();
       if (onEdit) onEdit();
     }
-  }, [isEditing])
+  }, [isEditing, onEdit])
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
