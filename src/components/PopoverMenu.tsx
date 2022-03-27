@@ -54,8 +54,6 @@ const PopoverMenu: FC<Props> = ({
       className={baseClass + `${showPopover ? " isShow" : ""}`}
     >
       {popovers.map(([str, f], i) => {
-        console.log(str);
-        console.log(f);
         return <div key={"pop-"+i} className={popoverWrapperClass} onClick={f}>
           <div className={popoverClass}>
             <p>{str}</p>

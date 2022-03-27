@@ -97,7 +97,7 @@ const CreateOrUpdateTodo: FC<Props> = ({
         }
       }
     },
-    [setShowTodoForm]
+    [setShowTodoForm, curEditingTodoId, modeIsCreate, resetCurEditingTodoId]
   );
 
   useEffect(() => {

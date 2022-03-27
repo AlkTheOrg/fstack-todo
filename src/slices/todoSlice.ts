@@ -14,6 +14,12 @@ export interface Todo {
   pageId: string;
 };
 
+export type SortKey = {
+  key: "name" | "due",
+  order: "asc" | "desc",
+  
+}
+
 // export type TodosByPageId = {
 //   [page: string]: Todo[];
 // };
@@ -76,9 +82,17 @@ export const todoSlice = createSlice({
     },
     setCurEditingTodoId: (state, action: PayloadAction<string>) => {
       state.curEditingTodoId = action.payload;
+    },
+    sortByKey: (state, action: PayloadAction<SortKey>) => {
+      const { key, order } = action.payload;
+      const [val1, val2] = order === 'desc' ? [1, -1] : [-1, 1]
+      state.byPageId[state.curPageId].sort((a, b) => {
+        let x = a[key]; let y = b[key];
+        return ((x < y) ? val1 : ((x > y) ? val2 : 0));
+      })
     }
   },
 });
 
-export const { setTodos, todoAdded, todoRemoved, todoUpdated, pageRemoved, setCurPage, setCurEditingTodoId } = todoSlice.actions;
+export const { setTodos, todoAdded, todoRemoved, todoUpdated, pageRemoved, setCurPage, setCurEditingTodoId, sortByKey } = todoSlice.actions;
 export default todoSlice.reducer;
