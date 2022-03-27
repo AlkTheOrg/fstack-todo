@@ -22,6 +22,7 @@ export type TodosState = {
   // byPageId: TodosByPageId;
   byPageId: Record<string, Todo[]>;
   curPageId: string;
+  curEditingTodoId?: string;
 };
 
 export const initialState: TodosState = {
@@ -32,6 +33,7 @@ export const initialState: TodosState = {
     ],
   },
   curPageId: "",
+  curEditingTodoId: ""
 };
 
 export const todoSlice = createSlice({
@@ -72,8 +74,11 @@ export const todoSlice = createSlice({
     setCurPage: (state, action: PayloadAction<string>) => {
       state.curPageId = action.payload;
     },
+    setCurEditingTodoId: (state, action: PayloadAction<string>) => {
+      state.curEditingTodoId = action.payload;
+    }
   },
 });
 
-export const { setTodos, todoAdded, todoRemoved, todoUpdated, pageRemoved, setCurPage } = todoSlice.actions;
+export const { setTodos, todoAdded, todoRemoved, todoUpdated, pageRemoved, setCurPage, setCurEditingTodoId } = todoSlice.actions;
 export default todoSlice.reducer;
