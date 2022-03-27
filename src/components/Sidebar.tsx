@@ -59,9 +59,9 @@ const Sidebar: FC<Props> = ({
 
   const combinedClasses = classes ? combineClassNames(classes) : "";
 
-  useEffect(() => {
-    console.log(isVisible);
-  }, [isVisible]);
+  // useEffect(() => {
+  //   console.log(isVisible);
+  // }, [isVisible]);
 
   return (
     <aside
