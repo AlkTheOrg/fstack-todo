@@ -36,4 +36,12 @@
     }
   }
 
+  &-small {
+    input {
+      font-size: 18px;
+      max-width: 175px;
+      height: 80%;
+      padding: 5px;
+    }
+  }
 }

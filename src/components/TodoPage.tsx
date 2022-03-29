@@ -28,6 +28,7 @@ export type TodoPageHeaderProps = {
   setShowNewTodoForm: Dispatch<SetStateAction<boolean>>;
   showPopover: boolean;
   setShowPopover: Dispatch<SetStateAction<boolean>>;
+  pageId: string
 };
 
 export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
@@ -37,9 +38,9 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
   setShowNewTodoForm,
   showPopover,
   setShowPopover,
+  pageId: curPageId
 }) => {
   const dispatch = useDispatch();
-  const curPageId = useSelector((state: RootState) => state.todo.curPageId)
   const title = useSelector((state: RootState) => state.todo.pages[curPageId])
   return (
     <div className="TodoPage-header">
@@ -99,9 +100,11 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
 
 const TodoPage: FC<Props> = ({ SearchIcon, NewTodoIcon, MoreIcon }) => {
   const [showNewTodoForm, setShowNewTodoForm] = useState(false);
-  const [showPopover, setShowPopover] = useState(true);
+  const [showPopover, setShowPopover] = useState(false);
+  const curPageId = useSelector((state: RootState) => state.todo.curPageId)
   return (
-    <div className="TodoPage">
+    <>
+    {curPageId ? <div className="TodoPage">
       <TodoPageHeader
         SearchIcon={SearchIcon || FiSearch}
         NewTodoIcon={NewTodoIcon || FiPlus}
@@ -109,12 +112,14 @@ const TodoPage: FC<Props> = ({ SearchIcon, NewTodoIcon, MoreIcon }) => {
         setShowNewTodoForm={setShowNewTodoForm}
         showPopover={showPopover}
         setShowPopover={setShowPopover}
+        pageId={curPageId}
       />
       <FilteredTodoList
         showNewTodoForm={showNewTodoForm}
         setShowNewTodoForm={setShowNewTodoForm}
       />
-    </div>
+    </div> : <h1>NO PAGE SELECTED</h1>}
+    </>
   );
 };
 

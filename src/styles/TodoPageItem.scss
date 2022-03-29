@@ -1,0 +1,57 @@
+// 13px-logo-13px-Name     edit-13px-trash-13px
+.TodoPageItem {
+  width: 100%;
+  height: 36px;
+  padding: 7px 13px;
+  // background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  font-size: 18px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(216, 216, 216);
+  }
+
+  .icon-wrapper {
+    width: 20px;
+    height: 20px;
+    // border: 1px solid rgba(51, 51, 51, 0.253);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+  }
+
+  .page-name {
+    margin-right: auto;
+    margin-left: 13px;
+    text-transform: capitalize;
+
+    &:hover {
+      background-color: rgba(142, 142, 142, 0.425);
+    }
+  }
+
+  .hover-icons {
+    display: flex;
+    position: relative;
+    right: 0;
+    cursor: pointer;
+
+    .icon-wrapper {
+      margin-left: 13px;
+    cursor: pointer;
+
+      &:hover {
+        background-color: rgba(142, 142, 142, 0.425);
+      }
+    }
+  }
+
+  // &:hover {
+  //   background-color: #d1d1d1;
+  // }
+}

@@ -6,16 +6,19 @@ import "../styles/EditableText.scss";
 export type Props = {
   DefaultComponent: FC;
   defaultValue: string;
+  showValueInUpperCase?: boolean;
   wrapperClass: string;
   inputClass?: string;
   onEdit?: () => any;
-  onSubmit?: (...args: any[]) => any;
-  excludedClickOutsideClasses?: string[]
+  onSubmit?: (newName: string) => any;
+  excludedClickOutsideClasses?: string[];
+  isEditingActive?: boolean;
 };
 
 const EditableText: FC<Props> = ({
   DefaultComponent,
   defaultValue,
+  showValueInUpperCase = true,
   wrapperClass,
   inputClass,
   onEdit,
@@ -63,7 +66,8 @@ const EditableText: FC<Props> = ({
       editableWrapperRef.current.querySelector('input')?.focus();
       if (onEdit) onEdit();
     }
-  }, [isEditing, onEdit])
+    if (!isEditing) cancelEditing();
+  }, [isEditing, onEdit, cancelEditing])
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
@@ -77,7 +81,7 @@ const EditableText: FC<Props> = ({
       <div ref={editableWrapperRef} className={wrapperClass}>
         <input
           type="text"
-          value={value.toUpperCase()}
+          value={showValueInUpperCase ? value.toUpperCase() : value}
           onChange={(e) => setValue(e.target.value)}
           className={inputClass ? inputClass : ""}
           onKeyDown={handleKeyDown}
