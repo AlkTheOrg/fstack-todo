@@ -17,8 +17,9 @@ export interface Todo {
 export type SortKey = {
   key: "name" | "due",
   order: "asc" | "desc",
-  
 }
+
+export type Pages = Record<string, string>; // pageId: name
 
 // export type TodosByPageId = {
 //   [page: string]: Todo[];
@@ -27,7 +28,7 @@ export type SortKey = {
 export type TodosState = {
   // byPageId: TodosByPageId;
   byPageId: Record<string, Todo[]>;
-  pages: Record<string, string>; // pageId: name
+  pages: Pages
   curPageId: string;
   curEditingTodoId?: string;
 };
@@ -40,7 +41,8 @@ export const initialState: TodosState = {
     ],
   },
   pages: {
-    "0": "groceries"
+    "0": "groceries",
+    "1": "job related"
   },
   curPageId: "0",
   curEditingTodoId: ""
@@ -80,6 +82,12 @@ export const todoSlice = createSlice({
     pageRemoved: (state, action: PayloadAction<string>) => {
       if (state.byPageId[action.payload])
         delete state.byPageId[action.payload];
+      if (state.curPageId === action.payload) {
+        state.curPageId = "";
+        //TODO either implement previous page state or assign this to the first page
+      }
+      if (state.pages[action.payload])
+        delete state.pages[action.payload];
     },
     setCurPage: (state, action: PayloadAction<string>) => {
       state.curPageId = action.payload;
@@ -96,12 +104,25 @@ export const todoSlice = createSlice({
       })
     },
     pageRenamed: (state, action: PayloadAction<[string, string]>) => {
-      const pageId = action.payload[0]
-      if (action.payload)
-        state.pages[pageId] = action.payload[1];
+      const [pageId, newName] = action.payload
+      if (pageId && newName)
+        state.pages[pageId] = newName;
+      else {
+        console.log('either pageId or newName is empty')
+      }
     }
   },
 });
 
-export const { setTodos, todoAdded, todoRemoved, todoUpdated, pageRemoved, setCurPage, setCurEditingTodoId, sortByKey, pageRenamed } = todoSlice.actions;
+export const {
+  setTodos,
+  todoAdded,
+  todoRemoved,
+  todoUpdated,
+  pageRemoved,
+  setCurPage,
+  setCurEditingTodoId,
+  sortByKey,
+  pageRenamed,
+} = todoSlice.actions;
 export default todoSlice.reducer;
