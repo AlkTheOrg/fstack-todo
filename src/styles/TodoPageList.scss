@@ -3,4 +3,32 @@
   height: calc(100% - 40px);
   z-index: 10;
   position: relative;
+
+  .header {
+    height: 40px;
+    margin: 5px auto;
+    padding: 0px 20px 0px 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+      font-size: 18px;
+      font-weight: bold;
+      user-select: none;
+    }
+    
+    .invisible-box {
+      visibility: hidden;
+      width: 50px;
+      height: inherit;
+    }
+
+    .new-todo-btn-wrapper {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+  }
 }
