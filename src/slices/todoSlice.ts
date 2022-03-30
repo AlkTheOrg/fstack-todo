@@ -79,6 +79,15 @@ export const todoSlice = createSlice({
       if (index >= 0)
         state.byPageId[updatedTodo.pageId][index] = updatedTodo;
     },
+    pageAdded: (state, action: PayloadAction<string>) => {
+      //TODO replace randId with id returned from backend
+      if (action.payload) {
+        const randId = Math.floor(Math.random() * 100) + 100
+        state.byPageId[randId] = [];
+        state.pages[randId] = action.payload;
+        state.curPageId = randId.toString();
+      }
+    },
     pageRemoved: (state, action: PayloadAction<string>) => {
       if (state.byPageId[action.payload])
         delete state.byPageId[action.payload];
@@ -88,6 +97,14 @@ export const todoSlice = createSlice({
       }
       if (state.pages[action.payload])
         delete state.pages[action.payload];
+    },
+    pageRenamed: (state, action: PayloadAction<[string, string]>) => {
+      const [pageId, newName] = action.payload
+      if (pageId && newName)
+        state.pages[pageId] = newName;
+      else {
+        console.log('either pageId or newName is empty')
+      }
     },
     setCurPage: (state, action: PayloadAction<string>) => {
       state.curPageId = action.payload;
@@ -103,14 +120,6 @@ export const todoSlice = createSlice({
         return ((x < y) ? val1 : ((x > y) ? val2 : 0));
       })
     },
-    pageRenamed: (state, action: PayloadAction<[string, string]>) => {
-      const [pageId, newName] = action.payload
-      if (pageId && newName)
-        state.pages[pageId] = newName;
-      else {
-        console.log('either pageId or newName is empty')
-      }
-    }
   },
 });
 
@@ -119,10 +128,11 @@ export const {
   todoAdded,
   todoRemoved,
   todoUpdated,
+  pageAdded,
   pageRemoved,
+  pageRenamed,
   setCurPage,
   setCurEditingTodoId,
   sortByKey,
-  pageRenamed,
 } = todoSlice.actions;
 export default todoSlice.reducer;

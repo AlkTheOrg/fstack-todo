@@ -3,20 +3,23 @@ import TodoPageItem from "./TodoPageItem";
 import { AppDispatch, RootState } from "../../store";
 import { connect } from "react-redux";
 import {
+  pageAdded,
   pageRemoved,
   pageRenamed,
   Pages,
   setCurPage,
 } from "../../slices/todoSlice";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { IconType } from "react-icons";
 import { FiPlus } from "react-icons/fi";
+import NewTodoPage from "./NewTodoPage";
 
 export type Props = {
   pages: Pages;
   onEditSubmit: (pageId: string, newName: string) => any;
   onDelete: (pageId: string) => any;
   onClick: (pageId: string) => any;
+  submitNewTodoPage: (name: string) => any;
   headerClass?: string;
   headerTitle?: string;
   NewTodoIcon?: IconType;
@@ -27,10 +30,18 @@ const TodoPageList: FC<Props> = ({
   onEditSubmit,
   onDelete,
   onClick,
+  submitNewTodoPage,
   headerClass,
   headerTitle,
-  NewTodoIcon = FiPlus
+  NewTodoIcon = FiPlus,
 }) => {
+  const [isAddingTodo, setIsAddingTodo] = useState(true);
+  const cancelNewTodo = () => setIsAddingTodo(false);
+  const submitNewTodo = (name: string) => {
+    submitNewTodoPage(name);
+    setIsAddingTodo(false);
+  }
+
   return (
     <div className="TodoPageList">
       <div className={headerClass ? headerClass : ""}>
@@ -43,11 +54,20 @@ const TodoPageList: FC<Props> = ({
           className="new-todo-btn-wrapper"
           aria-label="Hide sidebar"
           role="button"
-          onClick={console.log} //TOD
+          onClick={() => setIsAddingTodo(true)}
         >
           <NewTodoIcon size="25" />
         </div>
       </div>
+
+      {isAddingTodo && (
+        <NewTodoPage
+          onCancel={cancelNewTodo}
+          onSubmit={submitNewTodo}
+          onClickOutside={cancelNewTodo}
+        />
+      )}
+
       {Object.keys(pages).map((pageId, i) => (
         <TodoPageItem
           name={pages[pageId]}
@@ -72,6 +92,7 @@ const mapDispatchToProps = (dispatch: AppDispatch) => {
       dispatch(pageRenamed([pageId, newName])),
     onDelete: (pageId: string) => dispatch(pageRemoved(pageId)),
     onClick: (pageId: string) => dispatch(setCurPage(pageId)),
+    submitNewTodoPage: (name: string) => dispatch(pageAdded(name)),
   };
 };
 
