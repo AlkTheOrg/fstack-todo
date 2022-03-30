@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState } from "react";
 import "../../styles/Sidebar.scss";
 import { FaChevronLeft } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
