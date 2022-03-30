@@ -1,7 +1,6 @@
 import { FC, useState, useEffect, useRef, useCallback } from "react";
-import { FiCheck } from "react-icons/fi";
-import { IoCloseOutline } from "react-icons/io5";
 import "../styles/EditableText.scss";
+import SubmitOrCancel from "./SubmitOrCancel";
 
 export type Props = {
   DefaultComponent: FC;
@@ -86,14 +85,10 @@ const EditableText: FC<Props> = ({
           className={inputClass ? inputClass : ""}
           onKeyDown={handleKeyDown}
         />
-        <div className="icons">
-          <div className="icon-wrapper" onClick={cancelEditing}>
-            <IoCloseOutline size={26} />
-          </div>
-          <div className="icon-wrapper" onClick={handleSubmit}>
-            <FiCheck size={26} />
-          </div>
-        </div>
+        <SubmitOrCancel
+          onClickCancel={cancelEditing}
+          onClickSubmit={handleSubmit}
+        />
       </div>
     );
   }
