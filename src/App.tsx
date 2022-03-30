@@ -36,7 +36,7 @@ function App() {
     <div className="App" style={{ height: "770px" }}>
       <Navbar />
       <div className="hero">
-        <Sidebar isDetached={true} classes={["Sidebar"]}>
+        <Sidebar isDetached={true} classes={["Sidebar"]} title="Your Pages">
           <TodoPageList />
         </Sidebar>
         <TodoPage />
