@@ -35,7 +35,7 @@ const TodoPageList: FC<Props> = ({
   headerTitle,
   NewTodoIcon = FiPlus,
 }) => {
-  const [isAddingTodo, setIsAddingTodo] = useState(true);
+  const [isAddingTodo, setIsAddingTodo] = useState(false);
   const cancelNewTodo = () => setIsAddingTodo(false);
   const submitNewTodo = (name: string) => {
     submitNewTodoPage(name);

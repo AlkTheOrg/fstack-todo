@@ -4,11 +4,14 @@ import { FaChevronLeft } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { combineClassNames } from "../../util/combineClassNames";
 import { IconType } from "react-icons";
+import { useDispatch } from 'react-redux';
+import { RootState } from "../../store";
+import { useSelector } from 'react-redux';
+import { detachModeToggled } from "../../slices/pageSettingsSlice";
 
 export interface Props {
   title?: string;
   isDetached?: boolean;
-  // DetachIcon?: HTMLImageElement | SVGElement | IconType;
   DetachIcon?: IconType;
   closeOnMouseLeave?: boolean;
   classes: string[];
@@ -17,7 +20,6 @@ export interface Props {
 
 export const defaultProps: Props = {
   title: "",
-  isDetached: true,
   DetachIcon: GiHamburgerMenu,
   classes: [],
   onClose: () => {},
@@ -25,18 +27,19 @@ export const defaultProps: Props = {
 
 const Sidebar: FC<Props> = ({
   title,
-  isDetached: detached,
   DetachIcon,
   classes,
   onClose,
   children,
 }): JSX.Element => {
-  const [isDetached, setIsDetached] = useState(detached);
+  const dispatch = useDispatch();
+  const isDetached = useSelector((state: RootState) => state.pageSettings.isSidebarDetached);
+
   //TODO Uncomment below after finishing the design of siebar
   // const [isVisible, setIsVisible] = useState(!isDetached);
   const [isVisible, setIsVisible] = useState(true);
 
-  const toggleDetach = () => setIsDetached((prev) => !prev); //TODO handle detach icon click
+  const toggleDetach = () => dispatch(detachModeToggled());
 
   const closeSidebar = () => {
     setIsVisible(false);
