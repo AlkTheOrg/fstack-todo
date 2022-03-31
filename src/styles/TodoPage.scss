@@ -56,6 +56,8 @@
   .no-page-selected {
     h1, h2 {
       text-align: center;
+      color: #333;
+      user-select: none;
     }
     h1 {
       font-size: 34px;

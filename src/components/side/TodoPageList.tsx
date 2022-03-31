@@ -40,7 +40,24 @@ const TodoPageList: FC<Props> = ({
   const submitNewTodo = (name: string) => {
     submitNewTodoPage(name);
     setIsAddingTodo(false);
-  }
+  };
+
+  const TodoPageItems = () => {
+    return (
+      <>
+        {Object.keys(pages).map((pageId, i) => (
+          <TodoPageItem
+            name={pages[pageId]}
+            onEditSubmit={onEditSubmit}
+            onDelete={() => onDelete(pageId)}
+            key={"tpi-" + i}
+            pageId={pageId}
+            onClick={() => onClick(pageId)}
+          />
+        ))}
+      </>
+    );
+  };
 
   return (
     <div className="TodoPageList">
@@ -68,16 +85,12 @@ const TodoPageList: FC<Props> = ({
         />
       )}
 
-      {Object.keys(pages).map((pageId, i) => (
-        <TodoPageItem
-          name={pages[pageId]}
-          onEditSubmit={onEditSubmit}
-          onDelete={() => onDelete(pageId)}
-          key={"tpi-" + i}
-          pageId={pageId}
-          onClick={() => onClick(pageId)}
-        />
-      ))}
+      {Object.keys(pages).length
+        ? <TodoPageItems />
+        : <div className="no-page centered">
+            <h2>You don't have any pages yet.</h2>
+          </div>
+      }
     </div>
   );
 };
