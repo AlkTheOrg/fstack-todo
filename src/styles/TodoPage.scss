@@ -45,11 +45,15 @@
     }
   }
   position: relative;
-  .no-page-selected {
+
+  .centered {
     position: absolute;
     top: 45%;
     left: 50%;
     transform: translate(-50%, -45%);
+  }
+
+  .no-page-selected {
     h1, h2 {
       text-align: center;
     }

@@ -129,7 +129,7 @@ const TodoPage: FC<Props> = ({ SearchIcon, NewTodoIcon, MoreIcon }) => {
             />
           </>
         ) : (
-          <div className="no-page-selected">
+          <div className="no-page-selected centered">
             <h1>NO PAGE SELECTED</h1>
             <h2>Please select a page or create a new one.</h2>
           </div>
