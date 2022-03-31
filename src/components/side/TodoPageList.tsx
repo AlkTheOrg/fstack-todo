@@ -47,7 +47,7 @@ const TodoPageList: FC<Props> = ({
       <>
         {Object.keys(pages).map((pageId, i) => (
           <TodoPageItem
-            name={pages[pageId]}
+            name={pages[pageId].name}
             onEditSubmit={onEditSubmit}
             onDelete={() => onDelete(pageId)}
             key={"tpi-" + i}

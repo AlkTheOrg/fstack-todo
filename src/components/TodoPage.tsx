@@ -41,7 +41,7 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
   pageId: curPageId,
 }) => {
   const dispatch = useDispatch();
-  const title = useSelector((state: RootState) => state.todo.pages[curPageId]);
+  const title = useSelector((state: RootState) => state.todo.pages[curPageId].name);
   return (
     <div className="TodoPage-header">
       <EditableText
@@ -75,19 +75,19 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
               popovers={[
                 [
                   "Ascending Date",
-                  () => dispatch(sortByKey({ key: "due", order: "asc" })),
+                  () => dispatch(sortByKey([curPageId, { key: "due", order: "asc" }])),
                 ],
                 [
                   "Descending Date",
-                  () => dispatch(sortByKey({ key: "due", order: "desc" })),
+                  () => dispatch(sortByKey([curPageId, { key: "due", order: "desc" }])),
                 ],
                 [
                   "Ascending Name",
-                  () => dispatch(sortByKey({ key: "name", order: "asc" })),
+                  () => dispatch(sortByKey([curPageId, { key: "name", order: "asc" }])),
                 ],
                 [
                   "Descending Name",
-                  () => dispatch(sortByKey({ key: "name", order: "desc" })),
+                  () => dispatch(sortByKey([curPageId, { key: "name", order: "desc" }])),
                 ],
               ]}
               showPopover={showPopover}

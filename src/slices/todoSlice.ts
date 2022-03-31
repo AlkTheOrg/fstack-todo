@@ -14,25 +14,30 @@ export interface Todo {
   pageId: string;
 };
 
-export type SortKey = {
-  key: "name" | "due",
-  order: "asc" | "desc",
+export type SortKey = "name" | "due";
+export type SortOrder = "asc" | "desc"
+
+export type SortProps = {
+  key: SortKey,
+  order: SortOrder,
 }
 
-export type Pages = Record<string, string>; // pageId: name
+export type Page = {
+  name: string,
+  sortKey: SortKey,
+  sortOrder: SortOrder
+}
 
-// export type TodosByPageId = {
-//   [page: string]: Todo[];
-// };
+export type Pages = Record<string, Page>; // pageId: Page
 
 export type TodosState = {
-  // byPageId: TodosByPageId;
   byPageId: Record<string, Todo[]>;
   pages: Pages
   curPageId: string;
   curEditingTodoId?: string;
 };
 
+//TODO change the initial state once api is connected
 export const initialState: TodosState = {
   byPageId: {
     "0": [
@@ -41,8 +46,8 @@ export const initialState: TodosState = {
     ],
   },
   pages: {
-    "0": "groceries",
-    "1": "job related"
+    "0": {name: "groceries", sortKey: "due", sortOrder: "asc"},
+    "1": {name: "job related", sortKey: "due", sortOrder: "asc"}
   },
   curPageId: "0",
   curEditingTodoId: ""
@@ -85,7 +90,7 @@ export const todoSlice = createSlice({
       if (action.payload) {
         const randId = Math.floor(Math.random() * 100) + 100
         state.byPageId[randId] = [];
-        state.pages[randId] = action.payload;
+        state.pages[randId] = {name: action.payload, sortKey: "due", sortOrder: "asc"};
         state.curPageId = randId.toString();
       }
     },
@@ -102,7 +107,7 @@ export const todoSlice = createSlice({
     pageRenamed: (state, action: PayloadAction<[string, string]>) => {
       const [pageId, newName] = action.payload
       if (pageId && newName)
-        state.pages[pageId] = newName;
+        state.pages[pageId].name = newName;
       else {
         console.log('either pageId or newName is empty')
       }
@@ -113,13 +118,12 @@ export const todoSlice = createSlice({
     setCurEditingTodoId: (state, action: PayloadAction<string>) => {
       state.curEditingTodoId = action.payload;
     },
-    sortByKey: (state, action: PayloadAction<SortKey>) => {
-      const { key, order } = action.payload;
-      const [val1, val2] = order === 'desc' ? [1, -1] : [-1, 1]
-      state.byPageId[state.curPageId].sort((a, b) => {
-        let x = a[key]; let y = b[key];
-        return ((x < y) ? val1 : ((x > y) ? val2 : 0));
-      })
+    sortByKey: (state, action: PayloadAction<[string, SortProps]>) => {
+      const [pageId, {key, order}] = action.payload;
+      if (state.pages[pageId]) {
+        state.pages[pageId].sortKey = key
+        state.pages[pageId].sortOrder = order
+      }
     },
   },
 });
