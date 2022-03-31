@@ -1,5 +1,5 @@
 import "../styles/TodoPage.scss";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, FC, SetStateAction, useState, useEffect } from "react";
 import { FiSearch, FiMoreHorizontal, FiPlus } from "react-icons/fi";
 import { IconType } from "react-icons";
 import FilteredTodoList from "../containers/FilteredTodoList";
@@ -28,7 +28,7 @@ export type TodoPageHeaderProps = {
   setShowNewTodoForm: Dispatch<SetStateAction<boolean>>;
   showPopover: boolean;
   setShowPopover: Dispatch<SetStateAction<boolean>>;
-  pageId: string
+  pageId: string;
 };
 
 export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
@@ -38,18 +38,20 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
   setShowNewTodoForm,
   showPopover,
   setShowPopover,
-  pageId: curPageId
+  pageId: curPageId,
 }) => {
   const dispatch = useDispatch();
-  const title = useSelector((state: RootState) => state.todo.pages[curPageId])
+  const title = useSelector((state: RootState) => state.todo.pages[curPageId]);
   return (
     <div className="TodoPage-header">
       <EditableText
         defaultValue={title}
         wrapperClass="EditableText"
         DefaultComponent={() => <h1 className="todo-title">{title}</h1>}
-        excludedClickOutsideClasses={['todo-title']}
-        onSubmit={(newName: string) => dispatch(pageRenamed([curPageId, newName]))}
+        excludedClickOutsideClasses={["todo-title"]}
+        onSubmit={(newName: string) =>
+          dispatch(pageRenamed([curPageId, newName]))
+        }
       />
 
       <div className="TodoPage-header-icons">
@@ -101,24 +103,38 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
 const TodoPage: FC<Props> = ({ SearchIcon, NewTodoIcon, MoreIcon }) => {
   const [showNewTodoForm, setShowNewTodoForm] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
-  const curPageId = useSelector((state: RootState) => state.todo.curPageId)
+  const curPageId = useSelector((state: RootState) => state.todo.curPageId);
+
+  useEffect(() => {
+    console.log(curPageId);
+  }, [curPageId]);
+
   return (
     <>
-    {curPageId ? <div className="TodoPage">
-      <TodoPageHeader
-        SearchIcon={SearchIcon || FiSearch}
-        NewTodoIcon={NewTodoIcon || FiPlus}
-        MoreIcon={MoreIcon || FiMoreHorizontal}
-        setShowNewTodoForm={setShowNewTodoForm}
-        showPopover={showPopover}
-        setShowPopover={setShowPopover}
-        pageId={curPageId}
-      />
-      <FilteredTodoList
-        showNewTodoForm={showNewTodoForm}
-        setShowNewTodoForm={setShowNewTodoForm}
-      />
-    </div> : <h1>NO PAGE SELECTED</h1>}
+      <div className="TodoPage">
+        {curPageId ? (
+          <>
+            <TodoPageHeader
+              SearchIcon={SearchIcon || FiSearch}
+              NewTodoIcon={NewTodoIcon || FiPlus}
+              MoreIcon={MoreIcon || FiMoreHorizontal}
+              setShowNewTodoForm={setShowNewTodoForm}
+              showPopover={showPopover}
+              setShowPopover={setShowPopover}
+              pageId={curPageId}
+            />
+            <FilteredTodoList
+              showNewTodoForm={showNewTodoForm}
+              setShowNewTodoForm={setShowNewTodoForm}
+            />
+          </>
+        ) : (
+          <div className="no-page-selected">
+            <h1>NO PAGE SELECTED</h1>
+            <h2>Please select a page or create a new one.</h2>
+          </div>
+        )}
+      </div>
     </>
   );
 };

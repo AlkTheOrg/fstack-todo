@@ -30,13 +30,17 @@ const TodoPageItem: FC<Props> = ({
 }) => {
   const [isHovering, setIsHovering] = useState(false);
   const handleSubmit = (newName: string) => onEditSubmit(pageId, newName);
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (e.target !== e.currentTarget) return;
+    onClick();
+  }
   const DefaultName = () => <p className="page-naame">{name}</p>;
   return (
     <div
       className="TodoPageItem"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
-      onClick={onClick}
+      onClick={handleClick}
     >
       <div className="icon-wrapper">
         <GrDocumentText size={20} />

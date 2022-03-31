@@ -44,4 +44,22 @@
       }
     }
   }
+  position: relative;
+  .no-page-selected {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -45%);
+    h1, h2 {
+      text-align: center;
+    }
+    h1 {
+      font-size: 34px;
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+    h2 {
+      font-size: 28px;
+    }
+  }
 }

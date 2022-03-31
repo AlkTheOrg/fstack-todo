@@ -56,6 +56,7 @@ export const todoSlice = createSlice({
       state.byPageId = action.payload;
     },
     todoAdded: (state, action: PayloadAction<Todo>) => {
+      if(!action.payload.name) return;
       if (state.byPageId[action.payload.pageId])
         state.byPageId[action.payload.pageId].unshift(action.payload);
       else
