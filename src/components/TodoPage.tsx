@@ -41,7 +41,7 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
   pageId: curPageId,
 }) => {
   const dispatch = useDispatch();
-  const title = useSelector((state: RootState) => state.todo.pages[curPageId].name);
+  const title = useSelector((state: RootState) => state.todo.pages[curPageId] ? state.todo.pages[curPageId].name : "");
   return (
     <div className="TodoPage-header">
       <EditableText

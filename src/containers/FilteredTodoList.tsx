@@ -21,7 +21,9 @@ const getFilteredTodos: (
   pageId: string,
   pages: Pages
 ) => TodoType[] = (records, pageId, pages) =>
-  sortByKey(records[pageId], pages[pageId].sortKey, pages[pageId].sortOrder);
+  pages[pageId]
+    ? sortByKey(records[pageId], pages[pageId].sortKey, pages[pageId].sortOrder)
+    : [];
 
 const mapStateToProps = (state: RootState, ownProps: OwnProps) => ({
   todos: getFilteredTodos(
