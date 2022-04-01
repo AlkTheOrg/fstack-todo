@@ -26,6 +26,12 @@ const UserSchema = new Schema(
       index: true,
       unique: true,
     },
+    todoPages: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "todoPage"
+      }
+    ]
     // signUpDate: { type: Date, default: Date.now() },
   },
   { timestamps: true }
