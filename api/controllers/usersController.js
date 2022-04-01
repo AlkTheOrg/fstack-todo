@@ -1,5 +1,6 @@
 const { USER_NOT_FOUND } = require("../constants");
 const User = require("../models/User");
+const { sendResponseIfExists } = require("../utils/sendResponseIfExists");
 
 module.exports.getUsers = (_, res) => {
   User.find()
@@ -18,31 +19,21 @@ module.exports.createUser = (req, res) => {
 module.exports.getUser = (req, res) => {
   const id = req.params.id;
   User.findOne({ _id: id })
-    .then((found) =>
-      found
-        ? res.send(found)
-        : res.status(400).send({ message: USER_NOT_FOUND })
-    )
+    .then((found) => sendResponseIfExists(found, res, USER_NOT_FOUND, 404))
     .catch((err) => res.status(404).send(err));
 };
 
 module.exports.deleteUser = (req, res) => {
   const id = req.params.id;
   User.findByIdAndDelete(id)
-    .then((dltdUser) =>
-      dltdUser
-        ? res.send(dltdUser)
-        : res.status(400).send({ message: USER_NOT_FOUND })
-    )
+    .then((dltdUser) => sendResponseIfExists(dltdUser, res, USER_NOT_FOUND, 404))
     .catch((err) => res.send(err));
 };
 
 module.exports.updateUser = (req, res) => {
   const id = req.params.id;
-  User.findByIdAndUpdate(id, req.body, { new: true })
-    .then((user) =>
-      user ? res.send(user) : res.status(400).send({ message: USER_NOT_FOUND })
-    )
+  User.findByIdAndUpdate(id, req.body, { new: true, runValidators: true })
+    .then((user) => sendResponseIfExists(user, res, USER_NOT_FOUND, 404))
     .catch((err) => res.status(404).send(err));
 };
 
