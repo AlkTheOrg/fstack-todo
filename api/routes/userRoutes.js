@@ -6,7 +6,7 @@ const router = new Router();
 const todoPageRouter = require("../routes/todoPageRouters");
 
 router.get("/", usersController.getUsers);
-router.post("/", usersController.createUser);
+// router.post("/", usersController.createUser);
 router.delete("/", usersController.deleteAll); //TODO delete later
 router.get("/:id", usersController.getUser);
 router.post("/:id", usersController.updateUser);

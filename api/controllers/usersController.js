@@ -10,13 +10,13 @@ module.exports.getUsers = (_, res) => {
     .catch((err) => res.status(404).send(err));
 };
 
-module.exports.createUser = (req, res) => {
-  const user = new User(req.body);
-  user
-    .save()
-    .then((savedUser) => res.send(savedUser))
-    .catch((err) => res.send(err));
-};
+// module.exports.createUser = (req, res) => {
+//   const user = new User(req.body);
+//   user
+//     .save()
+//     .then((savedUser) => res.send(savedUser))
+//     .catch((err) => res.send(err));
+// };
 
 module.exports.getUser = (req, res) => {
   const id = req.params.id;
