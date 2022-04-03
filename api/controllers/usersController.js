@@ -1,6 +1,8 @@
-const { USER_NOT_FOUND } = require("../constants");
+const { USER_NOT_FOUND, TODO_PAGE_NOT_FOUND } = require("../constants");
 const User = require("../models/User");
+const TodoPage = require("../models/TodoPage");
 const { sendResponseIfExists } = require("../utils/sendResponseIfExists");
+const Todo = require("../models/Todo");
 
 module.exports.getUsers = (_, res) => {
   User.find()
@@ -26,7 +28,24 @@ module.exports.getUser = (req, res) => {
 module.exports.deleteUser = (req, res) => {
   const id = req.params.id;
   User.findByIdAndDelete(id)
-    .then((dltdUser) => sendResponseIfExists(dltdUser, res, USER_NOT_FOUND, 404))
+    .then((dltdUser) => {
+      if (dltdUser && dltdUser.todoPages) {
+        console.log('dltdUser:', dltdUser);
+        const todoPageIds = dltdUser.todoPages;
+        for (let i = 0; i < todoPageIds.length; i++) {
+          TodoPage.findByIdAndDelete(todoPageIds[i])
+            .then(dltdTodoPage => {
+              if (dltdTodoPage && dltdTodoPage.todos) {
+                Todo.deleteMany({ id: { $in: dltdTodoPage.todos } })
+                  .then(dltdPage => console.log(dltdPage))
+                  .catch(err => res.status(404).send(err))
+              } else 
+                res.status(400).send(TODO_PAGE_NOT_FOUND);
+            })
+        }
+        res.send(dltdUser);
+      } else res.status(400).send(USER_NOT_FOUND);
+    })
     .catch((err) => res.send(err));
 };
 
@@ -40,6 +59,14 @@ module.exports.updateUser = (req, res) => {
 //TODO delete later
 module.exports.deleteAll = (_, res) => {
   User.deleteMany({})
-    .then((users) => res.send(users))
+    .then((users) =>
+      TodoPage.deleteMany({})
+        .then((pages) =>
+          Todo.deleteMany({})
+            .then((todos) => res.send(users))
+            .catch((err) => res.status(404).send(err))
+        )
+        .catch((err) => res.status(404).send(err))
+    )
     .catch((err) => res.status(404).send(err));
 };

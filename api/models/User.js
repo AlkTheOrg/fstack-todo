@@ -8,20 +8,20 @@ const UserSchema = new Schema(
     username: {
       type: String,
       lowercase: true,
-      required: [true, "A username must be given"],
+      required: [true, "A username must be provided"],
       match: [/^[a-zA-Z0-9]+$/, "is invalid"],
       index: true,
       unique: true,
     },
     password: {
       type: String,
-      required: [true, "A password must be given"],
+      required: [true, "A password must be provided"],
       minLength: [6, "Password must be at least 6 characters"],
     },
     email: {
       type: String,
       lowercase: true,
-      required: [true, "An email must be given"],
+      required: [true, "An email must be provided"],
       match: [/\S+@\S+\.\S+/, "is invalid"],
       index: true,
       unique: true,
