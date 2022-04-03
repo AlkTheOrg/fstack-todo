@@ -16,6 +16,11 @@ const TodoSchema = new Schema({
   color: {
     type: String,
     default: "#000",
+  },
+  completed: {
+    type: Boolean,
+    enum: [true, false],
+    default: false
   }
 });
 
