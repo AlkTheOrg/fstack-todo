@@ -12,7 +12,7 @@ import { setCurPage, setTodos } from "./slices/todoSlice";
 import { mockTodos } from "./temp/mockData";
 
 function App() {
-  const token = useSelector((state: RootState) => state.auth.token);
+  // const token = TODO;
   const dispatch = useDispatch();
 
   useEffect(() => {
