@@ -5,4 +5,5 @@ module.exports = {
   PASSWORD_DOESNT_MATCH: "Password doesn't match",
   AUTH_DENIED: "Authorization denied",
   INVALID_TOKEN: "The token is invalid",
+  UNAUTHENTICATED_ACCESS: "The access is not authenticated."
 }
