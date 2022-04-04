@@ -37,10 +37,12 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-UserSchema.methods.toAuthJSON = function () {
+UserSchema.methods.toAuthJSON = function (token) {
   return {
+    id: this._id,
     username: this.username,
     email: this.email,
+    token
   };
 };
 

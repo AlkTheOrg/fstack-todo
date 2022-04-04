@@ -7,28 +7,36 @@ module.exports.signup = (req, res) => {
   const user = new User(req.body);
   user
     .save()
-    .then((savedUser) => res.send(savedUser))
-    .catch((err) => res.send(err));
+    .then((savedUser) => {
+      const token = generateToken(savedUser);
+      res.send(user.toAuthJSON(token));
+    })
+    .catch((err) => {
+      if (!err.errors) res.status(404).send(err);
+      const firstErrorKey = Object.keys(err.errors)[0];
+      if (!firstErrorKey) res.status(404).send(err);
+      else res.status(404).json({ message: err.errors[Object.keys(err.errors)[0]].message });
+    });
 };
 
 module.exports.login = async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
     if (user) {
-      const result = bcrypt.compare(req.body.password, user.password)
+      const result = await bcrypt.compare(req.body.password, user.password);
       if (result) {
-        console.log('before token')
+        console.log("before token");
         const token = generateToken(user);
-        console.log('token:', token)
-        res.json({ token });
+        console.log("token:", token);
+        res.send(user.toAuthJSON(token));
       } else {
-        res.status(400).json({ error: PASSWORD_DOESNT_MATCH})
+        res.status(400).json({ message: PASSWORD_DOESNT_MATCH });
       }
     } else {
-      res.status(400).json({ error: USER_NOT_FOUND})
+      res.status(400).json({ message: USER_NOT_FOUND });
     }
-  } catch(error) {
+  } catch (error) {
     console.log(error);
-    res.status(400).json({ error })
+    res.status(400).json({ error });
   }
-}
+};
