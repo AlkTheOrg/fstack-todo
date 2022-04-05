@@ -6,7 +6,12 @@ const { sendResponseIfExists } = require("../utils/sendResponseIfExists");
 
 module.exports.getTodoPages = (req, res) => {
   User.find({ _id: req.body.id })
-    .populate("todoPages")
+    .populate({
+      path: "todoPages",
+      populate: {
+        path: "todos"
+      }
+    })
     .then((user) =>
       sendResponseIfExists(
         user.length && user[0] && user[0].todoPages,
