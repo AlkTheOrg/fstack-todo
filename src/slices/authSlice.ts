@@ -37,7 +37,7 @@ export const initialState: AuthState = {
   message: "",
 };
 
-interface ValidationErrors {
+export interface ValidationErrors {
   message: string
 }
 // Register user

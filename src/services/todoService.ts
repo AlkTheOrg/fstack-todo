@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SortKey, SortOrder, Page } from "../slices/todoSlice";
+import { SortKey, SortOrder, Page, PageWithId } from "../slices/todoSlice";
 import { getToken } from "../util/authHelpers";
 
 const API_URL = "http://localhost:5000";
@@ -47,9 +47,9 @@ const createTodoPage = async (userId: string, todoPage: Page) => {
   return result;
 
 }
-const updateTodoPage = async (userId: string, todoPage: Page, tpId: string) => {
+const updateTodoPage = async (userId: string, todoPage: PageWithId) => {
   const response = await axios.post(
-    API_URL + '/user/' + userId + '/todo-page/' + tpId,
+    API_URL + '/user/' + userId + '/todo-page/' + todoPage.id,
     todoPage,
     getAxiosConfig()
   )
@@ -57,7 +57,13 @@ const updateTodoPage = async (userId: string, todoPage: Page, tpId: string) => {
   console.log('update todoPage result:', result);
   return result;
 }
-const deleteTodoPage = async (userId: string, tpId: string) => {
+
+export type DeleteTodoPage = {
+  userId: string,
+  tpId: string
+}
+
+const deleteTodoPage = async ({ userId , tpId }: DeleteTodoPage) => {
   const response = await axios.delete(
     API_URL + '/user/' + userId + '/todo-page/' + tpId,
     getAxiosConfig()

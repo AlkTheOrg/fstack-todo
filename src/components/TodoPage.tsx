@@ -1,5 +1,5 @@
 import "../styles/TodoPage.scss";
-import { Dispatch, FC, SetStateAction, useState, useEffect } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import { FiSearch, FiMoreHorizontal, FiPlus } from "react-icons/fi";
 import { IconType } from "react-icons";
 import FilteredTodoList from "../containers/FilteredTodoList";
@@ -104,10 +104,6 @@ const TodoPage: FC<Props> = ({ SearchIcon, NewTodoIcon, MoreIcon }) => {
   const [showNewTodoForm, setShowNewTodoForm] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
   const curPageId = useSelector((state: RootState) => state.todo.curPageId);
-
-  useEffect(() => {
-    console.log(curPageId);
-  }, [curPageId]);
 
   return (
     <>

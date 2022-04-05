@@ -8,6 +8,7 @@ import {
   pageRenamed,
   Pages,
   PageWithId,
+  removePage,
   setCurPage,
 } from "../../slices/todoSlice";
 import { FC, useState } from "react";
@@ -17,8 +18,9 @@ import NewTodoPage from "./NewTodoPage";
 
 export type Props = {
   pages: Pages;
+  userId: string;
   onEditSubmit: (pageId: string, newName: string) => any;
-  onDelete: (pageId: string) => any;
+  onDelete: (tpId: string, userId: string) => any;
   onClick: (pageId: string) => any;
   submitNewTodoPage: (page: PageWithId) => any;
   headerClass?: string;
@@ -28,6 +30,7 @@ export type Props = {
 
 const TodoPageList: FC<Props> = ({
   pages,
+  userId,
   onEditSubmit,
   onDelete,
   onClick,
@@ -52,7 +55,7 @@ const TodoPageList: FC<Props> = ({
           <TodoPageItem
             name={pages[pageId].name}
             onEditSubmit={onEditSubmit}
-            onDelete={() => onDelete(pageId)}
+            onDelete={() => onDelete(pageId, userId)}
             key={"tpi-" + i}
             pageId={pageId}
             onClick={() => onClick(pageId)}
@@ -100,13 +103,21 @@ const TodoPageList: FC<Props> = ({
 
 const mapStateToProps = (state: RootState) => ({
   pages: state.todo.pages,
+  userId: state.auth.user ? state.auth.user.id : ''
 });
 
 const mapDispatchToProps = (dispatch: AppDispatch) => {
   return {
     onEditSubmit: (pageId: string, newName: string) =>
       dispatch(pageRenamed([pageId, newName])),
-    onDelete: (pageId: string) => dispatch(pageRemoved(pageId)),
+    onDelete: async(tpId: string, userId: string) => {
+      const resultAction = await dispatch(removePage({ userId, tpId }))
+      console.log('removePage called');
+      if (removePage.fulfilled.match(resultAction)) {
+        const deletedPage = resultAction.payload;
+        console.log('deletedPage:', deletedPage);
+      }
+    },
     onClick: (pageId: string) => dispatch(setCurPage(pageId)),
     submitNewTodoPage: (page: PageWithId) => dispatch(pageAdded(page)),
   };

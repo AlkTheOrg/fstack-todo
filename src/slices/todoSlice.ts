@@ -1,4 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import todoService, { DeleteTodoPage } from "../services/todoService";
+import { AxiosError } from "axios";
+import { ValidationErrors } from "./authSlice";
 // import { current } from "immer"
 
 export const findTodoIndex: (todos: Todo[], id: string) => number = (
@@ -42,7 +45,6 @@ export type TodosState = {
   curEditingTodoId?: string;
 };
 
-//TODO change the initial state once api is connected
 export const initialState: TodosState = {
   byPageId: {
     // "0": [
@@ -58,6 +60,20 @@ export const initialState: TodosState = {
   curPageId: "",
   curEditingTodoId: ""
 };
+
+export const removePage = createAsyncThunk(
+  "todoPage/remove",
+  async (deleteParams: DeleteTodoPage, thunkAPI) => {
+    try {
+      console.log('todoPage remove dispatched');
+      return await todoService.deleteTodoPage(deleteParams);
+    } catch(error) {
+      let err = error as AxiosError<ValidationErrors>
+      if (!err.response) throw err;
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+  }
+)
 
 export const todoSlice = createSlice({
   name: "todo",
@@ -131,6 +147,17 @@ export const todoSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(removePage.pending, (state, action) => {
+        const { tpId } = action.meta.arg;
+        todoSlice.caseReducers.pageRemoved(state, {...action, payload: tpId})
+        console.log('removePage pending:', action.meta.arg);
+      })
+      .addCase(removePage.fulfilled, (state, action) => {
+        console.log('removePage fulfilled:', action.payload);
+      })
+  }
 });
 
 export const {

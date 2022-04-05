@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "./store";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import TodoPageList from "./components/side/TodoPageList";
 import "./styles/reset.scss";
 import "./styles/App.scss";
 import TodoPage from "./components/TodoPage";
-import { pageAdded, setCurPage, setTodos, todoAdded } from "./slices/todoSlice";
+import { pageAdded, setTodos, todoAdded } from "./slices/todoSlice";
 import { mockTodos } from "./temp/mockData";
 import todoService, { TodoPageReponse } from "./services/todoService";
 
@@ -28,7 +28,6 @@ function App() {
   //       })),
   //     })
   //   );
-  //   dispatch(setCurPage("0"));
   // }, [dispatch]);
 
   //similar logic to: if (!token) return <h1>Login</h1>;
