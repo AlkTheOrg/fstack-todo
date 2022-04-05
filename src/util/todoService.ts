@@ -1,6 +1,5 @@
 import axios from "axios";
-import { UnregisteredUser, UserLogin } from "../slices/authSlice";
-import { SortKey, SortOrder } from "../slices/todoSlice";
+import { SortKey, SortOrder, Page } from "../slices/todoSlice";
 import { getToken } from "./authHelpers";
 
 const API_URL = "http://localhost:5000";
@@ -37,9 +36,36 @@ const getTodoPages = async (userId: string) => {
   return result;
 };
 
-// new TodoPage
-// update TodoPage
-// delete TodoPage
+const createTodoPage = async (userId: string, todoPage: Page) => {
+  const response = await axios.post(
+    API_URL + '/user/' + userId + '/todo-page/',
+    todoPage,
+    getAxiosConfig()
+  )
+  const result = response.data;
+  console.log('create todoPage result:', result);
+  return result;
+
+}
+const updateTodoPage = async (userId: string, todoPage: Page, tpId: string) => {
+  const response = await axios.post(
+    API_URL + '/user/' + userId + '/todo-page/' + tpId,
+    todoPage,
+    getAxiosConfig()
+  )
+  const result = response.data;
+  console.log('update todoPage result:', result);
+  return result;
+}
+const deleteTodoPage = async (userId: string, tpId: string) => {
+  const response = await axios.delete(
+    API_URL + '/user/' + userId + '/todo-page/' + tpId,
+    getAxiosConfig()
+  )
+  const result = response.data;
+  console.log('delete todoPage result:', result);
+  return result;
+}
 
 // new Todo
 // update Todo
@@ -47,6 +73,9 @@ const getTodoPages = async (userId: string) => {
 
 const todoService = {
   getTodoPages,
+  createTodoPage,
+  updateTodoPage,
+  deleteTodoPage
 };
 
 export default todoService;
