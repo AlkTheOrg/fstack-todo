@@ -9,7 +9,7 @@ import "./styles/App.scss";
 import TodoPage from "./components/TodoPage";
 import { pageAdded, setCurPage, setTodos, todoAdded } from "./slices/todoSlice";
 import { mockTodos } from "./temp/mockData";
-import todoService, { TodoPageReponse } from "./util/todoService";
+import todoService, { TodoPageReponse } from "./services/todoService";
 
 function App() {
   // const token = TODO;

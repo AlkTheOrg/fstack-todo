@@ -1,6 +1,6 @@
 import axios from "axios";
 import { SortKey, SortOrder, Page } from "../slices/todoSlice";
-import { getToken } from "./authHelpers";
+import { getToken } from "../util/authHelpers";
 
 const API_URL = "http://localhost:5000";
 

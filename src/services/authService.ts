@@ -1,6 +1,6 @@
 import axios from "axios";
 import { UnregisteredUser, UserLogin } from "../slices/authSlice";
-import { removeToken, setToken } from "./authHelpers";
+import { removeToken, setToken } from "../util/authHelpers";
 
 const API_URL = "http://localhost:5000";
 
