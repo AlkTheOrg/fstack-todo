@@ -66,7 +66,7 @@ function App() {
         });
       });
     }
-    if (user) {
+    if (user && user.id) {
       apiTodoPages(user.id);
     }
   }, [user, dispatch]);
