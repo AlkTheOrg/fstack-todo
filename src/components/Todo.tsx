@@ -8,7 +8,6 @@ import { useDispatch } from 'react-redux';
 
 export interface Props extends TodoType {
   removeTodo: () => any;
-  updateTodo: () => any;
   EditIcon?: IconType
 }
 
@@ -19,7 +18,6 @@ const Todo: React.FC<Props> = ({
   name,
   pageId,
   removeTodo,
-  updateTodo,
   children,
   EditIcon = FiEdit2
 }) => {

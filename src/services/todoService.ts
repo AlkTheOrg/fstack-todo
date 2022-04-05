@@ -93,7 +93,7 @@ export type CreateTodo = {
 
 const createTodo = async({ userId, tpId, todo }: CreateTodo) => {
   const response = await axios.post(
-    API_URL + '/user/' + userId + '/todo-page/' + tpId + 'todo/',
+    API_URL + '/user/' + userId + '/todo-page/' + tpId + '/todo/',
     todo,
     getAxiosConfig()
   )
@@ -109,9 +109,10 @@ export type UpdateTodo = {
 }
 
 const updateTodo = async({ userId, tpId, todo }: UpdateTodo) => {
+  const { color, completed, due, name } = todo;
   const response = await axios.post(
-    API_URL + '/user/' + userId + '/todo-page/' + tpId + 'todo/' + todo.id,
-    todo,
+    API_URL + '/user/' + userId + '/todo-page/' + tpId + '/todo/' + todo.id,
+    { color, completed, due, name },
     getAxiosConfig()
   )
   const result = response.data;
@@ -127,7 +128,7 @@ export type DeleteTodo = {
 
 const deleteTodo = async ({ userId , tpId, todo }: DeleteTodo) => {
   const response = await axios.delete(
-    API_URL + '/user/' + userId + '/todo-page/' + tpId + 'todo/' + todo.id,
+    API_URL + '/user/' + userId + '/todo-page/' + tpId + '/todo/' + todo.id,
     getAxiosConfig()
   )
   const result = response.data;

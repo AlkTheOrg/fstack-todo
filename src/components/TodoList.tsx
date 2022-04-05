@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useState, useEffect } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import { Todo as TodoType } from "../slices/todoSlice";
 import Todo from "./Todo";
 import "../styles/TodoList.scss";
@@ -30,7 +30,7 @@ const TodoList: FC<Props> = ({
     <div className="TodoList">
       {showNewTodoForm && (
         <TodoWrapper>
-          <CreateOrUpdateTodo setShowTodoForm={setShowNewTodoForm} />
+          <CreateOrUpdateTodo setShowTodoForm={setShowNewTodoForm} updateTodo={updateTodo}/>
         </TodoWrapper>
       )}
       {todos &&
@@ -44,6 +44,7 @@ const TodoList: FC<Props> = ({
                   prevColor={todo.color}
                   prevStartDate={todo.due}
                   prevName={todo.name}
+                  updateTodo={updateTodo}
                 />
               </TodoWrapper>
             );
@@ -52,7 +53,6 @@ const TodoList: FC<Props> = ({
             <TodoWrapper key={"todo" + i}>
               <Todo
                 removeTodo={() => removeTodo(todo)}
-                updateTodo={() => updateTodo(todo)}
                 {...todo}
               />
             </TodoWrapper>

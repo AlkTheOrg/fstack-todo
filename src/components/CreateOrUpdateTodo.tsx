@@ -7,7 +7,7 @@ import {
   useRef,
   useCallback,
 } from "react";
-import { connect, DispatchProp, MapDispatchToProps } from "react-redux";
+import { connect } from "react-redux";
 import DatePicker from "react-datepicker";
 import "../styles/DatePicker.scss";
 import "react-datepicker/dist/react-datepicker.css";
@@ -16,7 +16,6 @@ import {
   setCurEditingTodoId,
   Todo,
   todoAdded,
-  todoUpdated,
 } from "../slices/todoSlice";
 import { getTomorrowDate } from "../util/getTomorrowDate";
 import { elementContainsTarget } from "../util/elementContainsTarget";
@@ -174,7 +173,6 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: AppDispatch) => {
   return {
     addTodo: (todo: Todo) => dispatch(todoAdded(todo)),
-    updateTodo: (todo: Todo) => dispatch(todoUpdated(todo)),
     resetCurEditingTodoId: () => dispatch(setCurEditingTodoId("")),
   };
 };

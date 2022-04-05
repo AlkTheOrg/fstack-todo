@@ -29,6 +29,7 @@ export type TodoPageHeaderProps = {
   showPopover: boolean;
   setShowPopover: Dispatch<SetStateAction<boolean>>;
   pageId: string;
+  userId: string;
 };
 
 export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
@@ -39,10 +40,10 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
   showPopover,
   setShowPopover,
   pageId: curPageId,
+  userId
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const title = useSelector((state: RootState) => state.todo.pages[curPageId] ? state.todo.pages[curPageId].name : "");
-  const userId = useSelector((state: RootState) => state.auth.user ? state.auth.user.id : '')
   return (
     <div className="TodoPage-header">
       <EditableText
@@ -105,6 +106,7 @@ const TodoPage: FC<Props> = ({ SearchIcon, NewTodoIcon, MoreIcon }) => {
   const [showNewTodoForm, setShowNewTodoForm] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
   const curPageId = useSelector((state: RootState) => state.todo.curPageId);
+  const userId = useSelector((state: RootState) => state.auth.user ? state.auth.user.id : '')
 
   return (
     <>
@@ -119,10 +121,13 @@ const TodoPage: FC<Props> = ({ SearchIcon, NewTodoIcon, MoreIcon }) => {
               showPopover={showPopover}
               setShowPopover={setShowPopover}
               pageId={curPageId}
+              userId={userId}
             />
             <FilteredTodoList
               showNewTodoForm={showNewTodoForm}
               setShowNewTodoForm={setShowNewTodoForm}
+              pageId={curPageId}
+              userId={userId}
             />
           </>
         ) : (

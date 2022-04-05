@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import todoService, { CreateTodoPage, DeleteTodoPage, UpdateTodoPage } from "../services/todoService";
+import todoService, { CreateTodoPage, DeleteTodo, DeleteTodoPage, UpdateTodo, UpdateTodoPage } from "../services/todoService";
 import { AxiosError } from "axios";
 import { ValidationErrors } from "./authSlice";
 // import { current } from "immer"
@@ -87,7 +87,7 @@ export const createPage = createAsyncThunk(
       return thunkAPI.rejectWithValue(err.response.data.message);
     }
   }
-)
+);
 
 export const updatePage = createAsyncThunk(
   "todoPage/update",
@@ -102,6 +102,34 @@ export const updatePage = createAsyncThunk(
     }
   }
 );
+
+export const removeTodo = createAsyncThunk(
+  "todo/remove",
+  async (deleteParams: DeleteTodo, thunkAPI) => {
+    try {
+      console.log("todo/remove dispatched");
+      return await todoService.deleteTodo(deleteParams);
+    } catch (error) {
+      let err = error as AxiosError<ValidationErrors>;
+      if (!err.response) throw err;
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+  }
+);
+
+export const updateTodo = createAsyncThunk(
+  'todo/update',
+  async (updateParams: UpdateTodo, thunkAPI) => {
+    try {
+      console.log('todo/update dispatched');
+      return await todoService.updateTodo(updateParams);
+    } catch (error) {
+      let err = error as AxiosError<ValidationErrors>;
+      if (!err.response) throw err;
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+  }
+)
 
 export const todoSlice = createSlice({
   name: "todo",
@@ -187,6 +215,22 @@ export const todoSlice = createSlice({
       })
       .addCase(updatePage.fulfilled, (state, action) => {
         console.log('updatePage fulfilled:', action.payload);
+      })
+      .addCase(removeTodo.pending, (state, action) => {
+        const { todo } = action.meta.arg;
+        todoSlice.caseReducers.todoRemoved(state, { ...action, payload: todo });
+        console.log('removeTodo pending:', action.meta.arg);
+      })
+      .addCase(removeTodo.fulfilled, (state, action) => {
+        console.log('removeTodo fulfilled', action.payload);
+      })
+      .addCase(updateTodo.pending, (state, action) => {
+        const { todo } = action.meta.arg;
+        todoSlice.caseReducers.todoUpdated(state, { ...action, payload: todo });
+        console.log('updateTodo pending:', action.meta.arg);
+      })
+      .addCase(updateTodo.fulfilled, (state, action) => {
+        console.log('updateTodo fulfilled', action.payload);
       })
   }
 });
