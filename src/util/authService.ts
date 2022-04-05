@@ -5,7 +5,7 @@ import { removeToken, setToken } from "./authHelpers";
 const API_URL = "http://localhost:5000";
 
 type UserResponse = {
-  _id: string;
+  id: string;
   username: string;
   email: string;
   token: string;
@@ -19,7 +19,7 @@ const register = async (user: UnregisteredUser) => {
   const result = response.data;
   console.log('register result:', result);
   setToken(result.token);
-  const userWithoutToken = { id: result._id, username: result.username, email: result.email }
+  const userWithoutToken = { id: result.id, username: result.username, email: result.email }
   return userWithoutToken;
 };
 
@@ -29,7 +29,7 @@ const login = async (user: UserLogin) => {
   const result = response.data;
   console.log('login result: ', result);
   setToken(result.token);
-  const userWithoutToken = { id: result._id, username: result.username, email: result.email }
+  const userWithoutToken = { id: result.id, username: result.username, email: result.email }
   return userWithoutToken;
 };
 

@@ -29,8 +29,8 @@ export const Login: React.FC<Props> = (props) => {
     const resultAction = await dispatch(login({ username, password }));
     console.log('handled login');
     if (login.fulfilled.match(resultAction)) {
-      console.log('inside fulfilled match');
       const foundUser = resultAction.payload;
+      console.log('foundUser:', foundUser);
       dispatch(setUser(foundUser));
     }
   };
