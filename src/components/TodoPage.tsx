@@ -6,8 +6,8 @@ import FilteredTodoList from "../containers/FilteredTodoList";
 import PopoverMenu from "./PopoverMenu";
 import EditableText from "./EditableText";
 import { useDispatch, useSelector } from "react-redux";
-import { pageRenamed, sortByKey } from "../slices/todoSlice";
-import { RootState } from "../store";
+import { updatePage } from "../slices/todoSlice";
+import { AppDispatch, RootState } from "../store";
 
 export type Props = {
   SearchIcon?: IconType;
@@ -40,8 +40,9 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
   setShowPopover,
   pageId: curPageId,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const title = useSelector((state: RootState) => state.todo.pages[curPageId] ? state.todo.pages[curPageId].name : "");
+  const userId = useSelector((state: RootState) => state.auth.user ? state.auth.user.id : '')
   return (
     <div className="TodoPage-header">
       <EditableText
@@ -50,7 +51,7 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
         DefaultComponent={() => <h1 className="todo-title">{title}</h1>}
         excludedClickOutsideClasses={["todo-title"]}
         onSubmit={(newName: string) =>
-          dispatch(pageRenamed([curPageId, newName]))
+          dispatch(updatePage({ userId, tpId: curPageId, todoPage: { name: newName } }))
         }
       />
 
@@ -75,19 +76,19 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
               popovers={[
                 [
                   "Ascending Date",
-                  () => dispatch(sortByKey([curPageId, { key: "due", order: "asc" }])),
+                  () => dispatch(updatePage({ userId, tpId: curPageId, todoPage: { sortKey: "due", sortOrder: "asc" }})),
                 ],
                 [
                   "Descending Date",
-                  () => dispatch(sortByKey([curPageId, { key: "due", order: "desc" }])),
+                  () => dispatch(updatePage({ userId, tpId: curPageId, todoPage: { sortKey: "due", sortOrder: "desc" }})),
                 ],
                 [
                   "Ascending Name",
-                  () => dispatch(sortByKey([curPageId, { key: "name", order: "asc" }])),
+                  () => dispatch(updatePage({ userId, tpId: curPageId, todoPage: { sortKey: "name", sortOrder: "asc" }})),
                 ],
                 [
                   "Descending Name",
-                  () => dispatch(sortByKey([curPageId, { key: "name", order: "desc" }])),
+                  () => dispatch(updatePage({ userId, tpId: curPageId, todoPage: { sortKey: "name", sortOrder: "desc" }})),
                 ],
               ]}
               showPopover={showPopover}

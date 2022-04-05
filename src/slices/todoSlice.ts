@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import todoService, { DeleteTodoPage } from "../services/todoService";
+import todoService, { CreateTodoPage, DeleteTodoPage, UpdateTodoPage } from "../services/todoService";
 import { AxiosError } from "axios";
 import { ValidationErrors } from "./authSlice";
 // import { current } from "immer"
@@ -65,15 +65,43 @@ export const removePage = createAsyncThunk(
   "todoPage/remove",
   async (deleteParams: DeleteTodoPage, thunkAPI) => {
     try {
-      console.log('todoPage remove dispatched');
+      console.log("todoPage/remove dispatched");
       return await todoService.deleteTodoPage(deleteParams);
-    } catch(error) {
-      let err = error as AxiosError<ValidationErrors>
+    } catch (error) {
+      let err = error as AxiosError<ValidationErrors>;
+      if (!err.response) throw err;
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+  }
+);
+
+export const createPage = createAsyncThunk(
+  "todoPage/create",
+  async (createParams: CreateTodoPage, thunkAPI) => {
+    try {
+      console.log('todoPage/create dispatched');
+      return await todoService.createTodoPage(createParams);
+    } catch (error) {
+      let err = error as AxiosError<ValidationErrors>;
       if (!err.response) throw err;
       return thunkAPI.rejectWithValue(err.response.data.message);
     }
   }
 )
+
+export const updatePage = createAsyncThunk(
+  "todoPage/update",
+  async (updateParams: UpdateTodoPage, thunkAPI) => {
+    try {
+      console.log("todoPage/update dispatched");
+      return await todoService.updateTodoPage(updateParams);
+    } catch (error) {
+      let err = error as AxiosError<ValidationErrors>;
+      if (!err.response) throw err;
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+  }
+);
 
 export const todoSlice = createSlice({
   name: "todo",
@@ -125,26 +153,15 @@ export const todoSlice = createSlice({
       if (state.pages[action.payload])
         delete state.pages[action.payload];
     },
-    pageRenamed: (state, action: PayloadAction<[string, string]>) => {
-      const [pageId, newName] = action.payload
-      if (pageId && newName)
-        state.pages[pageId].name = newName;
-      else {
-        console.log('either pageId or newName is empty')
-      }
+    pageUpdated: (state, action: PayloadAction<[string, Partial<Page>]>) => {
+      const [pageId, partialPage] = action.payload;
+      state.pages[pageId] = { ...state.pages[pageId], ...partialPage };
     },
     setCurPage: (state, action: PayloadAction<string>) => {
       state.curPageId = action.payload;
     },
     setCurEditingTodoId: (state, action: PayloadAction<string>) => {
       state.curEditingTodoId = action.payload;
-    },
-    sortByKey: (state, action: PayloadAction<[string, SortProps]>) => {
-      const [pageId, {key, order}] = action.payload;
-      if (state.pages[pageId]) {
-        state.pages[pageId].sortKey = key
-        state.pages[pageId].sortOrder = order
-      }
     },
   },
   extraReducers: (builder) => {
@@ -157,6 +174,20 @@ export const todoSlice = createSlice({
       .addCase(removePage.fulfilled, (state, action) => {
         console.log('removePage fulfilled:', action.payload);
       })
+      .addCase(createPage.pending, (state, action) => {
+
+      })
+      .addCase(createPage.fulfilled, (state, action) => {
+        
+      })
+      .addCase(updatePage.pending, (state, action) => {
+        const { tpId, todoPage } = action.meta.arg;
+        todoSlice.caseReducers.pageUpdated(state, { ...action, payload: [tpId, todoPage] })
+        console.log('updatePage pending:', action.meta.arg);
+      })
+      .addCase(updatePage.fulfilled, (state, action) => {
+        console.log('updatePage fulfilled:', action.payload);
+      })
   }
 });
 
@@ -167,9 +198,8 @@ export const {
   todoUpdated,
   pageAdded,
   pageRemoved,
-  pageRenamed,
+  pageUpdated,
   setCurPage,
   setCurEditingTodoId,
-  sortByKey,
 } = todoSlice.actions;
 export default todoSlice.reducer;

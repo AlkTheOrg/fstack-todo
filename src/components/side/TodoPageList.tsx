@@ -4,11 +4,10 @@ import { AppDispatch, RootState } from "../../store";
 import { connect } from "react-redux";
 import {
   pageAdded,
-  pageRemoved,
-  pageRenamed,
   Pages,
   PageWithId,
   removePage,
+  updatePage,
   setCurPage,
 } from "../../slices/todoSlice";
 import { FC, useState } from "react";
@@ -19,7 +18,7 @@ import NewTodoPage from "./NewTodoPage";
 export type Props = {
   pages: Pages;
   userId: string;
-  onEditSubmit: (pageId: string, newName: string) => any;
+  onEditSubmit: (tpId: string, newName: string, userId: string) => any;
   onDelete: (tpId: string, userId: string) => any;
   onClick: (pageId: string) => any;
   submitNewTodoPage: (page: PageWithId) => any;
@@ -54,7 +53,7 @@ const TodoPageList: FC<Props> = ({
         {Object.keys(pages).map((pageId, i) => (
           <TodoPageItem
             name={pages[pageId].name}
-            onEditSubmit={onEditSubmit}
+            onEditSubmit={(tpId: string, newName: string) => onEditSubmit(tpId, newName, userId)}
             onDelete={() => onDelete(pageId, userId)}
             key={"tpi-" + i}
             pageId={pageId}
@@ -108,8 +107,14 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: AppDispatch) => {
   return {
-    onEditSubmit: (pageId: string, newName: string) =>
-      dispatch(pageRenamed([pageId, newName])),
+    onEditSubmit: async (tpId: string, newName: string, userId: string) => {
+      const resultAction = await dispatch(updatePage({ userId, tpId, todoPage: { name: newName } }))
+      console.log('rename page called');
+      if (removePage.fulfilled.match(resultAction)) {
+        const updatedPage = resultAction.payload;
+        console.log('updatedPage:', updatedPage);
+      }
+    },
     onDelete: async(tpId: string, userId: string) => {
       const resultAction = await dispatch(removePage({ userId, tpId }))
       console.log('removePage called');

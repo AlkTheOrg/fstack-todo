@@ -36,7 +36,12 @@ const getTodoPages = async (userId: string) => {
   return result;
 };
 
-const createTodoPage = async (userId: string, todoPage: Page) => {
+export type CreateTodoPage = {
+  userId: string,
+  todoPage: Page,
+}
+
+const createTodoPage = async ({ userId, todoPage }: CreateTodoPage) => {
   const response = await axios.post(
     API_URL + '/user/' + userId + '/todo-page/',
     todoPage,
@@ -47,21 +52,28 @@ const createTodoPage = async (userId: string, todoPage: Page) => {
   return result;
 
 }
-const updateTodoPage = async (userId: string, todoPage: PageWithId) => {
+
+export type UpdateTodoPage = {
+  userId: string;
+  tpId: string;
+  todoPage: Partial<Page>;
+};
+
+const updateTodoPage = async ({ userId, tpId, todoPage }: UpdateTodoPage) => {
   const response = await axios.post(
-    API_URL + '/user/' + userId + '/todo-page/' + todoPage.id,
+    API_URL + "/user/" + userId + "/todo-page/" + tpId,
     todoPage,
     getAxiosConfig()
-  )
+  );
   const result = response.data;
-  console.log('update todoPage result:', result);
+  console.log("update todoPage result:", result);
   return result;
-}
+};
 
 export type DeleteTodoPage = {
-  userId: string,
-  tpId: string
-}
+  userId: string;
+  tpId: string;
+};
 
 const deleteTodoPage = async ({ userId , tpId }: DeleteTodoPage) => {
   const response = await axios.delete(
