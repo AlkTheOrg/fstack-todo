@@ -1,0 +1,46 @@
+import axios from "axios";
+import { UnregisteredUser, UserLogin } from "../slices/authSlice";
+import { removeToken, setToken } from "./authHelpers";
+
+const API_URL = "http://localhost:5000";
+
+type UserResponse = {
+  _id: string;
+  username: string;
+  email: string;
+  token: string;
+};
+
+const register = async (user: UnregisteredUser) => {
+  const response = await axios.post<UserResponse>(
+    API_URL + "/signup",
+    user
+  );
+  const result = response.data;
+  console.log('register result:', result);
+  setToken(result.token);
+  const userWithoutToken = { id: result._id, username: result.username, email: result.email }
+  return userWithoutToken;
+};
+
+const login = async (user: UserLogin) => {
+  const response = await axios.post<UserResponse>(API_URL + "/login", user);
+  console.log("api login called");
+  const result = response.data;
+  console.log('login result: ', result);
+  setToken(result.token);
+  const userWithoutToken = { id: result._id, username: result.username, email: result.email }
+  return userWithoutToken;
+};
+
+const logout = () => {
+  removeToken();
+}
+
+const authService = {
+  register,
+  login,
+  logout
+};
+
+export default authService;

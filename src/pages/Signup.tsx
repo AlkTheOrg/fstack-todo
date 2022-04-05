@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { login, reset, setUser } from "../slices/authSlice";
+import { register, reset, setUser } from "../slices/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 
 interface Props {}
 
-export const Login: React.FC<Props> = (props) => {
+export const Signup: React.FC<Props> = (props) => {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch: AppDispatch = useDispatch();
   const { loading, isError, message } = useSelector((state: RootState) => state.auth);
@@ -24,30 +25,37 @@ export const Login: React.FC<Props> = (props) => {
     }
   }, [user, navigate]);
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const resultAction = await dispatch(login({ username, password }));
-    console.log('handled login');
-    if (login.fulfilled.match(resultAction)) {
-      console.log('inside fulfilled match');
-      const foundUser = resultAction.payload;
-      dispatch(setUser(foundUser));
+    const resultAction = await dispatch(
+      register({ username, email, password })
+    );
+    if (register.fulfilled.match(resultAction)) {
+      const newUser = resultAction.payload;
+      dispatch(setUser(newUser));
     }
   };
 
   return (
     <div className="page">
       <div>
-        <h2>Login</h2>
+        <h2>Signup</h2>
       </div>
 
       {isError && <div className="error">{message}</div>}
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSignup}>
         <input
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
           type="text"
           value={username}
+          required
+        />
+        <input
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          type="email"
+          value={email}
           required
         />
         <input
@@ -70,4 +78,4 @@ export const Login: React.FC<Props> = (props) => {
   );
 };
 
-export default Login;
+export default Signup;
