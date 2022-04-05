@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SortKey, SortOrder, Page, PageWithId } from "../slices/todoSlice";
+import { SortKey, SortOrder, Page, PageWithId, Todo } from "../slices/todoSlice";
 import { getToken } from "../util/authHelpers";
 
 const API_URL = "http://localhost:5000";
@@ -85,15 +85,64 @@ const deleteTodoPage = async ({ userId , tpId }: DeleteTodoPage) => {
   return result;
 }
 
-// new Todo
-// update Todo
-// delete Todo
+export type CreateTodo = {
+  userId: string,
+  tpId: string,
+  todo: Omit<Todo, "id">
+}
+
+const createTodo = async({ userId, tpId, todo }: CreateTodo) => {
+  const response = await axios.post(
+    API_URL + '/user/' + userId + '/todo-page/' + tpId + 'todo/',
+    todo,
+    getAxiosConfig()
+  )
+  const result = response.data;
+  console.log('create todo result:', result);
+  return result;
+}
+
+export type UpdateTodo = {
+  userId: string,
+  tpId: string,
+  todo: Todo
+}
+
+const updateTodo = async({ userId, tpId, todo }: UpdateTodo) => {
+  const response = await axios.post(
+    API_URL + '/user/' + userId + '/todo-page/' + tpId + 'todo/' + todo.id,
+    todo,
+    getAxiosConfig()
+  )
+  const result = response.data;
+  console.log('create todo result:', result);
+  return result;
+}
+
+export type DeleteTodo = {
+  userId: string,
+  tpId: string,
+  todo: Todo
+};
+
+const deleteTodo = async ({ userId , tpId, todo }: DeleteTodo) => {
+  const response = await axios.delete(
+    API_URL + '/user/' + userId + '/todo-page/' + tpId + 'todo/' + todo.id,
+    getAxiosConfig()
+  )
+  const result = response.data;
+  console.log('delete todoPage result:', result);
+  return result;
+}
 
 const todoService = {
   getTodoPages,
   createTodoPage,
   updateTodoPage,
-  deleteTodoPage
+  deleteTodoPage,
+  createTodo,
+  updateTodo,
+  deleteTodo
 };
 
 export default todoService;
