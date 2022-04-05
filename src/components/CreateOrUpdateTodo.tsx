@@ -111,8 +111,9 @@ const CreateOrUpdateTodo: FC<Props> = ({
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
+    // TODO pass the returned todo's id
     if (mode === "create")
-      addTodo({ color, name, id: "1332", due: startDate, pageId: curPageId });
+      addTodo({ color, name, id: "1332", due: startDate, pageId: curPageId, completed: false });
     else if (curEditingTodoId) {
       updateTodo({
         color,
@@ -120,6 +121,7 @@ const CreateOrUpdateTodo: FC<Props> = ({
         id: curEditingTodoId,
         due: startDate,
         pageId: curPageId,
+        completed: false
       });
       resetCurEditingTodoId();
     }

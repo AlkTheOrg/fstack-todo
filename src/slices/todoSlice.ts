@@ -12,6 +12,7 @@ export interface Todo {
   due: Date;
   color: string;
   pageId: string;
+  completed: boolean;
 };
 
 export type SortKey = "name" | "due";
@@ -41,8 +42,8 @@ export type TodosState = {
 export const initialState: TodosState = {
   byPageId: {
     "0": [
-      { id: "0", name: "example0", color: "red", pageId: "0", due: new Date(Date.now()) },
-      { id: "1", name: "example1", color: "yellow", pageId: "0", due: new Date(Date.now()) },
+      { id: "0", name: "example0", color: "red", pageId: "0", due: new Date(Date.now()), completed: false },
+      { id: "1", name: "example1", color: "yellow", pageId: "0", due: new Date(Date.now()), completed: false },
     ],
   },
   pages: {
