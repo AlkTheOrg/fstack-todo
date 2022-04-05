@@ -16,20 +16,20 @@ function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch(
-      setTodos({
-        "0": mockTodos,
-        "1": mockTodos.map((todo) => ({
-          ...todo,
-          id: 1 + todo.id,
-          pageId: "1",
-          name: "111" + todo.name,
-        })),
-      })
-    );
-    dispatch(setCurPage("0"));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(
+  //     setTodos({
+  //       "0": mockTodos,
+  //       "1": mockTodos.map((todo) => ({
+  //         ...todo,
+  //         id: 1 + todo.id,
+  //         pageId: "1",
+  //         name: "111" + todo.name,
+  //       })),
+  //     })
+  //   );
+  //   dispatch(setCurPage("0"));
+  // }, [dispatch]);
 
   //similar logic to: if (!token) return <h1>Login</h1>;
   const user = useSelector((state: RootState) => state.auth.user);

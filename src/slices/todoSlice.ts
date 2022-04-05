@@ -45,16 +45,17 @@ export type TodosState = {
 //TODO change the initial state once api is connected
 export const initialState: TodosState = {
   byPageId: {
-    "0": [
-      { id: "0", name: "example0", color: "red", pageId: "0", due: new Date(Date.now()), completed: false },
-      { id: "1", name: "example1", color: "yellow", pageId: "0", due: new Date(Date.now()), completed: false },
-    ],
+    // "0": [
+    //   { id: "0", name: "example0", color: "red", pageId: "0", due: new Date(Date.now()), completed: false },
+    //   { id: "1", name: "example1", color: "yellow", pageId: "0", due: new Date(Date.now()), completed: false },
+    // ],
   },
   pages: {
-    "0": {name: "groceries", sortKey: "due", sortOrder: "asc"},
-    "1": {name: "job related", sortKey: "due", sortOrder: "asc"}
+    // "0": {name: "groceries", sortKey: "due", sortOrder: "asc"},
+    // "1": {name: "job related", sortKey: "due", sortOrder: "asc"}
   },
-  curPageId: "0",
+  // curPageId: "0",
+  curPageId: "",
   curEditingTodoId: ""
 };
 
