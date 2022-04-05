@@ -23,10 +23,14 @@ export type SortProps = {
   order: SortOrder,
 }
 
-export type Page = {
+export interface Page {
   name: string,
   sortKey: SortKey,
   sortOrder: SortOrder
+}
+
+export interface PageWithId extends Page {
+  id: string
 }
 
 export type Pages = Record<string, Page>; // pageId: Page
@@ -86,13 +90,12 @@ export const todoSlice = createSlice({
       if (index >= 0)
         state.byPageId[updatedTodo.pageId][index] = updatedTodo;
     },
-    pageAdded: (state, action: PayloadAction<string>) => {
-      //TODO replace randId with id returned from backend
+    pageAdded: (state, action: PayloadAction<PageWithId>) => {
       if (action.payload) {
-        const randId = Math.floor(Math.random() * 100) + 100
-        state.byPageId[randId] = [];
-        state.pages[randId] = {name: action.payload, sortKey: "due", sortOrder: "asc"};
-        state.curPageId = randId.toString();
+        const { name, sortKey, sortOrder, id } = action.payload;
+        state.byPageId[id] = [];
+        state.pages[id] = { name: name, sortKey: sortKey, sortOrder: sortOrder };
+        state.curPageId = id.toString();
       }
     },
     pageRemoved: (state, action: PayloadAction<string>) => {

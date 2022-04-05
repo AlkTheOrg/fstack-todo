@@ -7,9 +7,9 @@ import TodoPageList from "./components/side/TodoPageList";
 import "./styles/reset.scss";
 import "./styles/App.scss";
 import TodoPage from "./components/TodoPage";
-import { setCurPage, setTodos } from "./slices/todoSlice";
+import { pageAdded, setCurPage, setTodos, todoAdded } from "./slices/todoSlice";
 import { mockTodos } from "./temp/mockData";
-import { getToken } from "./util/authHelpers";
+import todoService, { TodoPageReponse } from "./util/todoService";
 
 function App() {
   // const token = TODO;
@@ -40,10 +40,36 @@ function App() {
   }, [user, navigate]);
 
   useEffect(() => {
-    if (user) {
-      // TODO
+    async function apiTodoPages(id: string) {
+      let result = await todoService.getTodoPages(id);
+      result.forEach((todoPage: TodoPageReponse) => {
+        dispatch(
+          pageAdded({
+            id: todoPage._id,
+            name: todoPage.name,
+            sortKey: todoPage.sortKey,
+            sortOrder: todoPage.sortOrder,
+          })
+        );
+        todoPage.todos.forEach((todo) => {
+          const { color, completed, due, _id, name } = todo;
+          dispatch(
+            todoAdded({
+              color,
+              completed,
+              id: _id,
+              name,
+              pageId: todoPage._id,
+              due: new Date(Date.parse(due)),
+            })
+          );
+        });
+      });
     }
-  }, [user])
+    if (user) {
+      apiTodoPages(user.id);
+    }
+  }, [user, dispatch]);
 
   return (
     <div className="App" style={{ height: "770px" }}>

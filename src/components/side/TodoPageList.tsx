@@ -7,6 +7,7 @@ import {
   pageRemoved,
   pageRenamed,
   Pages,
+  PageWithId,
   setCurPage,
 } from "../../slices/todoSlice";
 import { FC, useState } from "react";
@@ -19,7 +20,7 @@ export type Props = {
   onEditSubmit: (pageId: string, newName: string) => any;
   onDelete: (pageId: string) => any;
   onClick: (pageId: string) => any;
-  submitNewTodoPage: (name: string) => any;
+  submitNewTodoPage: (page: PageWithId) => any;
   headerClass?: string;
   headerTitle?: string;
   NewTodoIcon?: IconType;
@@ -38,7 +39,9 @@ const TodoPageList: FC<Props> = ({
   const [isAddingTodo, setIsAddingTodo] = useState(false);
   const cancelNewTodo = () => setIsAddingTodo(false);
   const submitNewTodo = (name: string) => {
-    submitNewTodoPage(name);
+    //TODO replace randId with id returned from backend
+    const randId = Math.floor(Math.random() * 100) + 100
+    submitNewTodoPage({ name, sortKey: "due", sortOrder: "asc", id: randId.toString() });
     setIsAddingTodo(false);
   };
 
@@ -105,7 +108,7 @@ const mapDispatchToProps = (dispatch: AppDispatch) => {
       dispatch(pageRenamed([pageId, newName])),
     onDelete: (pageId: string) => dispatch(pageRemoved(pageId)),
     onClick: (pageId: string) => dispatch(setCurPage(pageId)),
-    submitNewTodoPage: (name: string) => dispatch(pageAdded(name)),
+    submitNewTodoPage: (page: PageWithId) => dispatch(pageAdded(page)),
   };
 };
 
