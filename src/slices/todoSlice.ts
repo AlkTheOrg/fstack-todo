@@ -154,7 +154,10 @@ export const todoSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state = initialState;
+      console.log('reset dispatched');
+      console.log('curState:', state)
+      console.log('initialState:', initialState)
+      return initialState;
     },
     setTodos: (state, action: PayloadAction<Record<string, Todo[]>>) => {
       state.byPageId = action.payload;

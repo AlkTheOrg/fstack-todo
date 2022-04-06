@@ -4,6 +4,8 @@ import { login, reset, setUser } from "../slices/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import "../styles/Form.scss";
+import todoService, { TodoPageReponse } from "../services/todoService";
+import { pageAdded, todoAdded } from "../slices/todoSlice";
 
 interface Props {}
 
@@ -20,7 +22,7 @@ export const Login: React.FC<Props> = () => {
 
   const user = useSelector((state: RootState) => state.auth.user);
   useEffect(() => {
-    if (user) {
+    if (user && user.id) {
       navigate("/");
     }
   }, [user, navigate]);
@@ -31,10 +33,38 @@ export const Login: React.FC<Props> = () => {
     console.log('handled login');
     if (login.fulfilled.match(resultAction)) {
       const foundUser = resultAction.payload;
+      await apiTodoPages(foundUser.id);
       console.log('foundUser:', foundUser);
       dispatch(setUser(foundUser));
     }
   };
+
+  async function apiTodoPages(id: string) {
+    let result = await todoService.getTodoPages(id);
+    result.forEach((todoPage: TodoPageReponse) => {
+      dispatch(
+        pageAdded({
+          id: todoPage._id,
+          name: todoPage.name,
+          sortKey: todoPage.sortKey,
+          sortOrder: todoPage.sortOrder,
+        })
+      );
+      todoPage.todos.forEach((todo) => {
+        const { color, completed, due, _id, name } = todo;
+        dispatch(
+          todoAdded({
+            color,
+            completed,
+            id: _id,
+            name,
+            pageId: todoPage._id,
+            due: new Date(Date.parse(due)),
+          })
+        );
+      });
+    });
+  }
 
   return (
     <div className="Form">
