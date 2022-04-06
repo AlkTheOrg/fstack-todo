@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import "../../styles/Sidebar.scss";
 import { FaChevronLeft } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -35,9 +35,7 @@ const Sidebar: FC<Props> = ({
   const dispatch = useDispatch();
   const isDetached = useSelector((state: RootState) => state.pageSettings.isSidebarDetached);
 
-  //TODO Uncomment below after finishing the design of siebar
-  // const [isVisible, setIsVisible] = useState(!isDetached);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(!isDetached);
 
   const toggleDetach = () => dispatch(detachModeToggled());
 
@@ -57,7 +55,10 @@ const Sidebar: FC<Props> = ({
   };
 
   const handleClickHide = () => {
-    if (isDetached) closeSidebar();
+    if (isDetached) {
+      if (isVisible) closeSidebar()
+      else setIsVisible(true);
+    }
   }
 
   const combinedClasses = classes ? combineClassNames(classes) : "";
@@ -102,7 +103,10 @@ const Sidebar: FC<Props> = ({
             }
             onClick={handleClickHide}
           >
+            <>
             <FaChevronLeft className="hide-icn" />
+            <FaChevronLeft className="hide-icn" />
+            </>
           </div>
         </div>
       )}

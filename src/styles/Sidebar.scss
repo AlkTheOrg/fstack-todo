@@ -1,11 +1,14 @@
+@use 'variables' as v;
+
 .Sidebar {
-  // background: red;
   position: relative;
   transition: transform 0.3s ease, opacity 0.2s, width 0.2s, height 0.2s,
     box-shadow 0.2s, height 0.6s, top 0.2s, margin-right 0.5s, background-color 0.5s;
   opacity: 0;
   box-shadow: 5px 5px 9px 1px rgba(0, 0, 0, 0.3);
   z-index: 100;
+  min-width: 265px;
+  background-color: white;
 
   .header {
     height: 40px;
@@ -15,7 +18,6 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    // background-color: red;
 
     h2 {
       font-size: 18px;
@@ -72,7 +74,6 @@
   }
 
   .hide-btn-container {
-    // background-color: green;
     width: 150px;
     position: absolute;
     top: 0;
@@ -81,22 +82,70 @@
     transition: width 1s, right 1s;
 
     .hide-btn {
-      border: 1px solid blue;
       width: 25px;
       position: absolute;
       top: 50%;
       left: 0;
-      transform: translateY(-100%);
+      transform: translateY(-100%) rotateZ(180deg);
       cursor: pointer;
 
       display: flex;
       justify-content: center;
       align-items: center;
-      // clip-path: polygon(0 0, 40% 12%, 40% 82%, 0 100%);
 
       .hide-icn {
+        margin-left: -5px;
         height: 25px;
+        color: #b5b5b5;
       }
+    }
+  }
+
+  @media screen and (max-width: v.$xl) {
+    &.isDetached {
+      margin-right: 102px;
+    }
+  
+    &.isAttached {
+      margin-right: 98px;
+    }
+  }
+
+  @media screen and (max-width: v.$lg) {
+    position: absolute;
+    left: 0;
+    box-shadow: 2px 2px 9px 1px rgba(0, 0, 0, 0.3);
+    opacity: 100%;
+
+    .hide-btn-container {
+      width: 20px;
+      right: -20px;
+      
+      .hide-btn {
+        top: 5px;
+        left: 0;
+        transform: rotateZ(180deg);
+
+        .hide-icn {
+          height: 20px;
+        }
+
+        &:hover {
+          .hide-icn {
+            color: #f50015;
+          }
+        }
+      }
+    }
+
+    &.isDetached {
+      top: 80px;
+    }
+  }
+
+  @media screen and (max-width: v.$med) {
+    &.isDetached {
+      top: 0px;
     }
   }
 }

@@ -1,6 +1,8 @@
+@use 'variables' as v;
+
 .TodoPage {
-  // background-color: lightcoral;
   width: 767px;
+  min-width: 587px;
   height: 820px;
   margin-top: 67px;
   box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -11,7 +13,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    // background-color: orchid;
     height: 44px;
     margin-bottom: 39px;
     padding-right: 10px;
@@ -67,5 +68,9 @@
     h2 {
       font-size: 28px;
     }
+  }
+
+  @media screen and (max-width: v.$lg) {
+    width: 100%;
   }
 }
