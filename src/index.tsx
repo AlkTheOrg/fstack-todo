@@ -7,9 +7,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Login } from './pages/Login';
 import Signup from './pages/Signup';
 import Navbar from './components/Navbar';
+import Profile from './pages/Profile';
 
 ReactDOM.render(
-
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
@@ -18,6 +18,7 @@ ReactDOM.render(
           <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<h1>no match</h1>} />
         </Routes>
       </BrowserRouter>
