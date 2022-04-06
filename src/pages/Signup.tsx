@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { register, reset, setUser } from "../slices/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../store";
+import "../styles/LoginOrSignup.scss";
 
 interface Props {}
 
@@ -11,7 +12,7 @@ export const Signup: React.FC<Props> = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch: AppDispatch = useDispatch();
-  const { loading, isError, message } = useSelector((state: RootState) => state.auth);
+  const { isLoading, isError, message } = useSelector((state: RootState) => state.auth);
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -37,43 +38,44 @@ export const Signup: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className="page">
-      <div>
-        <h2>Signup</h2>
+    <div className="Signup">
+      <div className="page">
+        <div>
+          <h2>Signup</h2>
+        </div>
+        <div className="validation">{isError ? message : ''}</div>
+        <form onSubmit={handleSignup}>
+          <input
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
+            type="text"
+            value={username}
+            minLength={3}
+            maxLength={30}
+            required
+            disabled={isLoading}
+          />
+          <input
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            type="email"
+            value={email}
+            required
+            disabled={isLoading}
+          />
+          <input
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            type="password"
+            value={password}
+            required
+            minLength={6}
+            maxLength={30}
+            disabled={isLoading}
+          />
+          <button type="submit" disabled={isLoading}>Signup</button>
+        </form>
       </div>
-
-      {isError && <div className="error">{message}</div>}
-      <form onSubmit={handleSignup}>
-        <input
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
-          type="text"
-          value={username}
-          required
-        />
-        <input
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          type="email"
-          value={email}
-          required
-        />
-        <input
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          type="password"
-          value={password}
-          required
-        />
-
-        {loading ? (
-          <div className="loading">
-            <span>Loading...</span>
-          </div>
-        ) : (
-          <button type="submit">Login</button>
-        )}
-      </form>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-.Login {
+.Login, .Signup {
   width: 100%;
   height: calc(100vh - 70px);
   position: relative;
@@ -73,6 +73,11 @@
     width: 100%;
     height: 60px;
     border-radius: 5px;
+
+    &:disabled {
+      cursor: default;
+      background-color: #36445e;
+    }
 
     &:hover {
       background-color: #36445e;

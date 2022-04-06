@@ -20,7 +20,6 @@ export type UserLogin = {
 }
 
 export type AuthState = {
-  loading: boolean;
   user: User | null;
   isError: boolean;
   isSuccess: boolean;
@@ -29,7 +28,6 @@ export type AuthState = {
 };
 
 export const initialState: AuthState = {
-  loading: false,
   user: null,
   isError: false,
   isSuccess: false,

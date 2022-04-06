@@ -12,6 +12,7 @@ const UserSchema = new Schema(
       match: [/^[a-zA-Z0-9]+$/, "is invalid"],
       index: true,
       unique: true,
+      minLength: [3, "username must be at least 3 characters"],
     },
     password: {
       type: String,

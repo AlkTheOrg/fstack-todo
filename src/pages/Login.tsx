@@ -3,15 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { login, reset, setUser } from "../slices/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../store";
-import "../styles/Login.scss";
+import "../styles/LoginOrSignup.scss";
 
 interface Props {}
 
-export const Login: React.FC<Props> = (props) => {
+export const Login: React.FC<Props> = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch: AppDispatch = useDispatch();
-  const { loading, isError, message } = useSelector((state: RootState) => state.auth);
+  const { isLoading, isError, message } = useSelector((state: RootState) => state.auth);
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -51,6 +51,7 @@ export const Login: React.FC<Props> = (props) => {
             value={username}
             id="username"
             required
+            disabled={isLoading}
           />
           <input
             onChange={(e) => setPassword(e.target.value)}
@@ -59,14 +60,9 @@ export const Login: React.FC<Props> = (props) => {
             value={password}
             id="password"
             required
+            disabled={isLoading}
           />
-          {loading ? (
-            <div className="loading">
-              <span>Loading...</span>
-            </div>
-          ) : (
-            <button type="submit" id="submit">Login</button>
-          )}
+          <button type="submit" id="submit" disabled={isLoading}>Login</button>
         </form>
       </div>
     </div>
