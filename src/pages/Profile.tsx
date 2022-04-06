@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import "../styles/Form.scss"
 import { useDispatch } from 'react-redux';
-import { reset } from '../slices/authSlice';
+import { remove, reset, setUser, update } from '../slices/authSlice';
+import { reset as resetTodoState } from "../slices/todoSlice";
 
 const Profile = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -31,21 +32,24 @@ const Profile = () => {
     console.log(userPrompt);
     if (userPrompt) {
       console.log('handled profile update');
-      // const resultAction = await dispatch(login({ username, password }));
-      // if (login.fulfilled.match(resultAction)) {
-      //   const foundUser = resultAction.payload;
-      //   console.log('foundUser:', foundUser);
-      //   dispatch(setUser(foundUser));
-      // }
+      const resultAction = await dispatch(update({ userId: user ? user.id : '', user: { username, password } }));
+      if (update.fulfilled.match(resultAction)) {
+        console.log('handled profile update');
+        const foundUser = resultAction.payload;
+        dispatch(setUser(foundUser));
+        console.log('foundUser:', foundUser);
+      }
     }
   };
 
-  const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     const userPrompt = window.confirm("Are you sure?");
     console.log(userPrompt);
     if (userPrompt) {
       console.log('handled profile delete');
+      await dispatch(remove(user ? user.id : ''));
+      dispatch(resetTodoState());
     }
 
   };
@@ -56,7 +60,7 @@ const Profile = () => {
         <div>
           <h2>Profile</h2>
         </div>
-        <div className="validation">{isError ? message : ''}</div>
+        <div className="validation">{message ? message : ''}</div>
         <form onSubmit={handleUpdate}>
           <input
             onChange={(e) => setUsername(e.target.value)}
@@ -66,6 +70,7 @@ const Profile = () => {
             id="username"
             required
             disabled={isLoading}
+            minLength={3}
           />
           <input
             onChange={(e) => setPassword(e.target.value)}
@@ -75,6 +80,7 @@ const Profile = () => {
             id="password"
             required
             disabled={isLoading}
+            minLength={6}
           />
           <button type="submit" id="submit" disabled={isLoading}>UPDATE</button>
           <button onClick={handleDelete} className="danger" type="button" disabled={isLoading}>DELETE</button>

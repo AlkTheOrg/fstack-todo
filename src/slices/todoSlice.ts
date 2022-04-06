@@ -151,6 +151,9 @@ export const todoSlice = createSlice({
   name: "todo",
   initialState,
   reducers: {
+    reset: (state) => {
+      state = initialState;
+    },
     setTodos: (state, action: PayloadAction<Record<string, Todo[]>>) => {
       state.byPageId = action.payload;
     },
@@ -265,6 +268,7 @@ export const todoSlice = createSlice({
 });
 
 export const {
+  reset,
   setTodos,
   todoAdded,
   todoRemoved,

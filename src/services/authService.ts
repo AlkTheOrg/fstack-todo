@@ -1,6 +1,7 @@
 import axios from "axios";
-import { UnregisteredUser, UserLogin } from "../slices/authSlice";
+import { setUser, UnregisteredUser, User, UserLogin } from "../slices/authSlice";
 import { removeToken, setToken } from "../util/authHelpers";
+import { getAxiosConfig } from "./todoService";
 
 const API_URL = "http://localhost:5000";
 
@@ -33,6 +34,31 @@ const login = async (user: UserLogin) => {
   return userWithoutToken;
 };
 
+type UserResponse2 = {
+  _id: string;
+  username: string;
+  email: string;
+  token: string;
+};
+
+const update = async (userId: string, user: UserLogin) => {
+  const response = await axios.post<UserResponse2>(API_URL + "/user/" + userId, user, getAxiosConfig());
+  console.log("api update user called");
+  const result = response.data;
+  console.log('update user result: ', result);
+  const userWithoutToken = { id: result._id, username: result.username, email: result.email }
+  return userWithoutToken;
+}
+
+const remove = async (userId: string) => {
+  const response = await axios.delete(API_URL + "/user/" + userId, getAxiosConfig());
+  console.log("api update user called");
+  const result = response.data;
+  console.log('update user result: ', result);
+  removeToken();
+  return true;
+}
+
 const logout = () => {
   removeToken();
 }
@@ -40,7 +66,9 @@ const logout = () => {
 const authService = {
   register,
   login,
-  logout
+  logout,
+  update,
+  remove
 };
 
 export default authService;

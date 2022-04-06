@@ -3,12 +3,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { logout } from "../slices/authSlice";
 import "../styles/Navbar.scss";
+import { reset } from "../slices/todoSlice";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
-  const handleLogout = () => dispatch(logout());
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(reset());
+  }
   return (
     <div className="Navbar">
       <div id="logo" onClick={() => user ? navigate('/') : navigate('/login')}>Toodo</div>

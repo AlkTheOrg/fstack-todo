@@ -22,7 +22,7 @@ type TodoResponse = {
   __v: number;
 };
 
-const getAxiosConfig = () => ({
+export const getAxiosConfig = () => ({
   headers: { Authorization: `Bearer ${getToken()}` }
 })
 

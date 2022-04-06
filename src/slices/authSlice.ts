@@ -53,7 +53,6 @@ export const register = createAsyncThunk(
   }
 );
 
-//Login user
 export const login = createAsyncThunk(
   "auth/login",
   async (user: UserLogin, thunkAPI) => {
@@ -72,6 +71,40 @@ export const logout = createAsyncThunk('auth/logout', async () => {
   await authService.logout();
 })
 
+export const remove = createAsyncThunk(
+  "user/remove",
+  async (userId: string, thunkAPI) => {
+    try {
+      console.log('login dispatched')
+      return await authService.remove(userId);
+    } catch(err) {
+      let error = err as AxiosError<ValidationErrors>;
+      if (!error.response) throw err;
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export type UpdateUser = {
+  userId: string,
+  user: UserLogin
+}
+
+export const update = createAsyncThunk(
+  "user/update",
+  async ({ userId, user }: UpdateUser, thunkAPI) => {
+    try {
+      console.log('update user dispatched')
+      return await authService.update(userId, user);
+    } catch(err) {
+      let error = err as AxiosError<ValidationErrors>;
+      if (!error.response) throw err;
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -82,7 +115,8 @@ export const authSlice = createSlice({
       state.isError = false;
       state.message = "";
     },
-    setUser: (state, action: PayloadAction<User>) => {
+    setUser: (state, action: PayloadAction<User | null>) => {
+      console.log('setUser:', action.payload);
       state.user = action.payload;
     },
   },
@@ -118,6 +152,35 @@ export const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
+      })
+      .addCase(remove.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(remove.fulfilled, (state) => {
+        state.user = null;
+        state.isLoading = false;
+        authSlice.caseReducers.reset(state);
+      })
+      .addCase(remove.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        if (action.payload && typeof action.payload === 'string') {
+          state.message = action.payload;
+        }
+      })
+      .addCase(update.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(update.fulfilled, (state) => {
+        state.isLoading = false;
+        state.message = 'Your profile has been updated';
+      })
+      .addCase(update.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        if (action.payload && typeof action.payload === 'string') {
+          state.message = action.payload;
+        }
       })
   },
 });
