@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { register, reset, setUser } from "../slices/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../store";
-import "../styles/LoginOrSignup.scss";
+import "../styles/Form.scss";
 
 interface Props {}
 
@@ -38,7 +38,7 @@ export const Signup: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className="Signup">
+    <div className="Form">
       <div className="page">
         <div>
           <h2>Signup</h2>
