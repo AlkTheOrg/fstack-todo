@@ -6,8 +6,9 @@ import FilteredTodoList from "../containers/FilteredTodoList";
 import PopoverMenu from "./PopoverMenu";
 import EditableText from "./EditableText";
 import { useDispatch, useSelector } from "react-redux";
-import { updatePage } from "../slices/todoSlice";
+import { setSearchString, updatePage } from "../slices/todoSlice";
 import { AppDispatch, RootState } from "../store";
+import Search from "./Search";
 
 export type Props = {
   SearchIcon?: IconType;
@@ -57,9 +58,10 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
       />
 
       <div className="TodoPage-header-icons">
-        <div className="icon-wrapper">
+        {/* <div className="icon-wrapper">
           <SearchIcon size={28} />
-        </div>
+        </div> */}
+        <Search SearchIcon={SearchIcon} onChange={(val: string) => dispatch(setSearchString(val))}/>
         <div className="icon-wrapper">
           <NewTodoIcon
             id="new-todo-icon"

@@ -21,17 +21,24 @@ type OwnProps = {
 const getFilteredTodos: (
   records: Record<string, TodoType[]>,
   pageId: string,
-  pages: Pages
-) => TodoType[] = (records, pageId, pages) =>
-  pages[pageId]
+  pages: Pages,
+  searchString: string
+) => TodoType[] = (records, pageId, pages, searchString) => {
+  const foundPages = pages[pageId]
     ? sortByKey(records[pageId], pages[pageId].sortKey, pages[pageId].sortOrder)
     : [];
+  if (!searchString) return foundPages;
+  return foundPages.filter((foundPage) =>
+    foundPage.name.includes(searchString)
+  );
+};
 
 const mapStateToProps = (state: RootState, ownProps: OwnProps) => ({
   todos: getFilteredTodos(
     state.todo.byPageId,
     state.todo.curPageId,
-    state.todo.pages
+    state.todo.pages,
+    state.todo.searchString
   ),
   showNewTodoForm: ownProps.showNewTodoForm,
   setShowNewTodoForm: ownProps.setShowNewTodoForm,

@@ -55,7 +55,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="Form">
+    <div className="Form" style={{background: "#25aef5"}}>
       <div className="page">
         <div>
           <h2>Profile</h2>

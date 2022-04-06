@@ -44,6 +44,7 @@ export type TodosState = {
   curPageId: string;
   curEditingTodoId?: string;
   isLoading: boolean;
+  searchString: string;
 };
 
 export const initialState: TodosState = {
@@ -60,7 +61,8 @@ export const initialState: TodosState = {
   // curPageId: "0",
   curPageId: "",
   curEditingTodoId: "",
-  isLoading: false
+  isLoading: false,
+  searchString: ''
 };
 
 export const removePage = createAsyncThunk(
@@ -210,6 +212,9 @@ export const todoSlice = createSlice({
     setCurEditingTodoId: (state, action: PayloadAction<string>) => {
       state.curEditingTodoId = action.payload;
     },
+    setSearchString: (state, action: PayloadAction<string>) => {
+      state.searchString = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -278,5 +283,6 @@ export const {
   pageUpdated,
   setCurPage,
   setCurEditingTodoId,
+  setSearchString
 } = todoSlice.actions;
 export default todoSlice.reducer;
