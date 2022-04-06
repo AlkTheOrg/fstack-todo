@@ -92,7 +92,7 @@ export type CreateTodo = {
 }
 
 const createTodo = async({ userId, tpId, todo }: CreateTodo) => {
-  const response = await axios.post(
+  const response = await axios.post<TodoResponse>(
     API_URL + '/user/' + userId + '/todo-page/' + tpId + '/todo/',
     todo,
     getAxiosConfig()
