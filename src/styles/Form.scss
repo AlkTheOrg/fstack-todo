@@ -1,3 +1,5 @@
+@use 'variables' as v;
+
 .Form {
   width: 100%;
   height: calc(100vh - 70px);
@@ -101,6 +103,18 @@
         -webkit-transition: all 0.2s ease;
         transition: all 0.2s ease;
       }
+    }
+  }
+
+  @media screen and (max-width: v.$med) {
+    .page {
+      width: 100%;
+    }
+  }
+
+  @media screen and (max-width: v.$sm) {
+    .page {
+      padding: 50px 15px;
     }
   }
 }
