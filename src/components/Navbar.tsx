@@ -11,7 +11,7 @@ const Navbar = () => {
   const handleLogout = () => dispatch(logout());
   return (
     <div className="Navbar">
-      <div id="logo" onClick={() => navigate('/')}>Toodo</div>
+      <div id="logo" onClick={() => user ? navigate('/') : navigate('/login')}>Toodo</div>
       <div className="buttons">
         {user ? (
           <>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { login, reset, setUser } from "../slices/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../store";
+import "../styles/Login.scss";
 
 interface Props {}
 
@@ -36,36 +37,38 @@ export const Login: React.FC<Props> = (props) => {
   };
 
   return (
-    <div className="page">
-      <div>
-        <h2>Login</h2>
+    <div className="Login">
+      <div className="page">
+        <div>
+          <h2>Login</h2>
+        </div>
+        <div className="validation">{isError ? message : ''}</div>
+        <form onSubmit={handleLogin}>
+          <input
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
+            type="text"
+            value={username}
+            id="username"
+            required
+          />
+          <input
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            type="password"
+            value={password}
+            id="password"
+            required
+          />
+          {loading ? (
+            <div className="loading">
+              <span>Loading...</span>
+            </div>
+          ) : (
+            <button type="submit" id="submit">Login</button>
+          )}
+        </form>
       </div>
-
-      {isError && <div className="error">{message}</div>}
-      <form onSubmit={handleLogin}>
-        <input
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
-          type="text"
-          value={username}
-          required
-        />
-        <input
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          type="password"
-          value={password}
-          required
-        />
-
-        {loading ? (
-          <div className="loading">
-            <span>Loading...</span>
-          </div>
-        ) : (
-          <button type="submit">Login</button>
-        )}
-      </form>
     </div>
   );
 };
