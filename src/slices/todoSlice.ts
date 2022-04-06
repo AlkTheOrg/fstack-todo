@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import todoService, { CreateTodoPage, DeleteTodo, DeleteTodoPage, UpdateTodo, UpdateTodoPage } from "../services/todoService";
+import todoService, { CreateTodo, CreateTodoPage, DeleteTodo, DeleteTodoPage, UpdateTodo, UpdateTodoPage } from "../services/todoService";
 import { AxiosError } from "axios";
 import { ValidationErrors } from "./authSlice";
 // import { current } from "immer"
@@ -43,6 +43,7 @@ export type TodosState = {
   pages: Pages
   curPageId: string;
   curEditingTodoId?: string;
+  isLoading: boolean;
 };
 
 export const initialState: TodosState = {
@@ -58,7 +59,8 @@ export const initialState: TodosState = {
   },
   // curPageId: "0",
   curPageId: "",
-  curEditingTodoId: ""
+  curEditingTodoId: "",
+  isLoading: false
 };
 
 export const removePage = createAsyncThunk(
@@ -124,6 +126,20 @@ export const updateTodo = createAsyncThunk(
       console.log('todo/update dispatched');
       return await todoService.updateTodo(updateParams);
     } catch (error) {
+      let err = error as AxiosError<ValidationErrors>;
+      if (!err.response) throw err;
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+  }
+)
+
+export const createTodo = createAsyncThunk(
+  'todo/create',
+  async (createParams: CreateTodo, thunkAPI) => {
+    try {
+      console.log('todo/create dispatched');
+      return await todoService.createTodo(createParams);
+    } catch(error) {
       let err = error as AxiosError<ValidationErrors>;
       if (!err.response) throw err;
       return thunkAPI.rejectWithValue(err.response.data.message);
@@ -203,10 +219,13 @@ export const todoSlice = createSlice({
         console.log('removePage fulfilled:', action.payload);
       })
       .addCase(createPage.pending, (state, action) => {
-
+        state.isLoading = true;
       })
       .addCase(createPage.fulfilled, (state, action) => {
-        
+        state.isLoading = false;
+      })
+      .addCase(createPage.rejected, (state, action) => {
+        state.isLoading = false;
       })
       .addCase(updatePage.pending, (state, action) => {
         const { tpId, todoPage } = action.meta.arg;
@@ -231,6 +250,16 @@ export const todoSlice = createSlice({
       })
       .addCase(updateTodo.fulfilled, (state, action) => {
         console.log('updateTodo fulfilled', action.payload);
+      })
+      .addCase(createTodo.pending, (state, action) => {
+        //TODO
+        state.isLoading = true;
+      })
+      .addCase(createTodo.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(createTodo.rejected, (state, action) => {
+        state.isLoading = false;
       })
   }
 });

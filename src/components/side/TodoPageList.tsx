@@ -1,14 +1,15 @@
 import "../../styles/TodoPageList.scss";
 import TodoPageItem from "./TodoPageItem";
 import { AppDispatch, RootState } from "../../store";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import {
-  pageAdded,
   Pages,
-  PageWithId,
   removePage,
   updatePage,
   setCurPage,
+  Page,
+  createPage,
+  pageAdded,
 } from "../../slices/todoSlice";
 import { FC, useState } from "react";
 import { IconType } from "react-icons";
@@ -21,10 +22,10 @@ export type Props = {
   onEditSubmit: (tpId: string, newName: string, userId: string) => any;
   onDelete: (tpId: string, userId: string) => any;
   onClick: (pageId: string) => any;
-  submitNewTodoPage: (page: PageWithId) => any;
   headerClass?: string;
   headerTitle?: string;
   NewTodoIcon?: IconType;
+  isLoading: boolean
 };
 
 const TodoPageList: FC<Props> = ({
@@ -33,17 +34,21 @@ const TodoPageList: FC<Props> = ({
   onEditSubmit,
   onDelete,
   onClick,
-  submitNewTodoPage,
   headerClass,
   headerTitle,
   NewTodoIcon = FiPlus,
+  isLoading
 }) => {
   const [isAddingTodo, setIsAddingTodo] = useState(false);
   const cancelNewTodo = () => setIsAddingTodo(false);
-  const submitNewTodo = (name: string) => {
-    //TODO replace randId with id returned from backend
-    const randId = Math.floor(Math.random() * 100) + 100
-    submitNewTodoPage({ name, sortKey: "due", sortOrder: "asc", id: randId.toString() });
+  const dispatch: AppDispatch = useDispatch();
+  const submitNewTodoPage = async (userId: string, todoPage: Page) => await dispatch(createPage({ userId, todoPage }));
+  const submitNewTodo = async(name: string) => {
+    const resultAction = await submitNewTodoPage(userId, { name, sortKey: "due", sortOrder: "asc" });
+    if (createPage.fulfilled.match(resultAction)) {
+      dispatch(pageAdded({ name, sortKey: "due", sortOrder: "asc", id: resultAction.payload._id }))
+      console.log('handled new todopage');
+    }
     setIsAddingTodo(false);
   };
 
@@ -87,6 +92,7 @@ const TodoPageList: FC<Props> = ({
           onCancel={cancelNewTodo}
           onSubmit={submitNewTodo}
           onClickOutside={cancelNewTodo}
+          isLoading={isLoading}
         />
       )}
 
@@ -102,7 +108,8 @@ const TodoPageList: FC<Props> = ({
 
 const mapStateToProps = (state: RootState) => ({
   pages: state.todo.pages,
-  userId: state.auth.user ? state.auth.user.id : ''
+  userId: state.auth.user ? state.auth.user.id : '',
+  isLoading: state.todo.isLoading
 });
 
 const mapDispatchToProps = (dispatch: AppDispatch) => {
@@ -124,7 +131,6 @@ const mapDispatchToProps = (dispatch: AppDispatch) => {
       }
     },
     onClick: (pageId: string) => dispatch(setCurPage(pageId)),
-    submitNewTodoPage: (page: PageWithId) => dispatch(pageAdded(page)),
   };
 };
 

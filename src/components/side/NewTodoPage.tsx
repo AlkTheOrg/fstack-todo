@@ -1,4 +1,4 @@
-import { FC, useState, useRef, useEffect, useCallback } from "react";
+import { FC, useState, useRef, useEffect } from "react";
 import SubmitOrCancel from "../SubmitOrCancel";
 import "../../styles/NewTodoPage.scss";
 
@@ -8,6 +8,7 @@ export type Props = {
   onSubmit: (name: string) => any;
   onCancel: () => any;
   onClickOutside: () => any;
+  isLoading: boolean
 };
 
 const NewTodoPage: FC<Props> = ({
@@ -15,6 +16,7 @@ const NewTodoPage: FC<Props> = ({
   onSubmit,
   onCancel,
   onClickOutside,
+  isLoading
 }) => {
   const [value, setValue] = useState(defaultValue);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -29,7 +31,7 @@ const NewTodoPage: FC<Props> = ({
     const handleClickOutside = (e: Event) => {
       const input = inputRef.current;
       const target = e.target as Element;
-      if (input && target && !input.contains(target)) {
+      if (input && target && !isLoading && !input.contains(target)) {
         onClickOutside();
       }
     };
@@ -37,12 +39,14 @@ const NewTodoPage: FC<Props> = ({
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [onClickOutside]);
+  }, [onClickOutside, isLoading]);
 
-  const cancelEditing = () => onCancel();
+  const cancelEditing = () => {
+    if (!isLoading) onCancel();
+  };
 
   const handleSubmit = () => {
-    onSubmit(value);
+    if (!isLoading) onSubmit(value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -56,17 +60,20 @@ const NewTodoPage: FC<Props> = ({
   return (
     <div className="NewTodoPage">
       <input
+        disabled={isLoading}
         ref={inputRef}
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={handleKeyDown}
       />
-      <SubmitOrCancel
+      {!isLoading &&
+        <SubmitOrCancel
         onClickCancel={cancelEditing}
         onClickSubmit={handleSubmit}
         iconSize={22}
-      />
+        />
+      }
     </div>
   );
 };

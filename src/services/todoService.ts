@@ -42,7 +42,7 @@ export type CreateTodoPage = {
 }
 
 const createTodoPage = async ({ userId, todoPage }: CreateTodoPage) => {
-  const response = await axios.post(
+  const response = await axios.post<TodoPageReponse>(
     API_URL + '/user/' + userId + '/todo-page/',
     todoPage,
     getAxiosConfig()
