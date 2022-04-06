@@ -24,7 +24,7 @@ export type Props = {
   onClick: (pageId: string) => any;
   headerClass?: string;
   headerTitle?: string;
-  NewTodoIcon?: IconType;
+  NewTodoPageIcon?: IconType;
   isLoading: boolean
 };
 
@@ -36,20 +36,20 @@ const TodoPageList: FC<Props> = ({
   onClick,
   headerClass,
   headerTitle,
-  NewTodoIcon = FiPlus,
+  NewTodoPageIcon = FiPlus,
   isLoading
 }) => {
-  const [isAddingTodo, setIsAddingTodo] = useState(false);
-  const cancelNewTodo = () => setIsAddingTodo(false);
+  const [isAddingTodoPage, setIsAddingTodoPage] = useState(false);
+  const cancelNewTodoPage = () => setIsAddingTodoPage(false);
   const dispatch: AppDispatch = useDispatch();
   const submitNewTodoPage = async (userId: string, todoPage: Page) => await dispatch(createPage({ userId, todoPage }));
-  const submitNewTodo = async(name: string) => {
+  const addNewTodoPage = async(name: string) => {
     const resultAction = await submitNewTodoPage(userId, { name, sortKey: "due", sortOrder: "asc" });
     if (createPage.fulfilled.match(resultAction)) {
       dispatch(pageAdded({ name, sortKey: "due", sortOrder: "asc", id: resultAction.payload._id }))
       console.log('handled new todopage');
     }
-    setIsAddingTodo(false);
+    setIsAddingTodoPage(false);
   };
 
   const TodoPageItems = () => {
@@ -81,17 +81,17 @@ const TodoPageList: FC<Props> = ({
           className="new-todo-btn-wrapper"
           aria-label="Hide sidebar"
           role="button"
-          onClick={() => setIsAddingTodo(true)}
+          onClick={() => setIsAddingTodoPage(true)}
         >
-          <NewTodoIcon size="25" />
+          <NewTodoPageIcon size="25" />
         </div>
       </div>
 
-      {isAddingTodo && (
+      {isAddingTodoPage && (
         <NewTodoPage
-          onCancel={cancelNewTodo}
-          onSubmit={submitNewTodo}
-          onClickOutside={cancelNewTodo}
+          onCancel={cancelNewTodoPage}
+          onSubmit={addNewTodoPage}
+          onClickOutside={cancelNewTodoPage}
           isLoading={isLoading}
         />
       )}
