@@ -50,7 +50,7 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
       <EditableText
         defaultValue={title}
         wrapperClass="EditableText"
-        DefaultComponent={() => <h1 className="todo-title">{title}</h1>}
+        DefaultComponent={() => <h1 className="todo-title">{title.length < 21 ? title : title.slice(0, 20) + "..."}</h1>}
         excludedClickOutsideClasses={["todo-title"]}
         onSubmit={(newName: string) =>
           dispatch(updatePage({ userId, tpId: curPageId, todoPage: { name: newName } }))

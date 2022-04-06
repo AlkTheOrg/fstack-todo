@@ -260,7 +260,6 @@ export const todoSlice = createSlice({
         console.log('updateTodo fulfilled', action.payload);
       })
       .addCase(createTodo.pending, (state, action) => {
-        //TODO
         state.isLoading = true;
       })
       .addCase(createTodo.fulfilled, (state, action) => {

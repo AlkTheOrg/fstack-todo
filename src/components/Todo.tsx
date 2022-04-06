@@ -58,7 +58,7 @@ const Todo: React.FC<Props> = ({
           className="Todo-name"
           style={{ color: completed ? "green" : nameOnHover ? color : "black" }}
         >
-          {name}
+          {name.length < 55 ? name : name.substring(0, 54) + "..."}
         </span>
       </main>
       <span className="Todo-due">

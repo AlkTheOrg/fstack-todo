@@ -34,7 +34,7 @@ const TodoPageItem: FC<Props> = ({
     if (e.target !== e.currentTarget) return;
     onClick();
   }
-  const DefaultName = () => <p className="page-naame">{name}</p>;
+  const DefaultName = () => <p className="page-naame">{name.length < 21 ? name : name.slice(0, 20) + "..."}</p>;
   return (
     <div
       className="TodoPageItem"

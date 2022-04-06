@@ -7,55 +7,54 @@ import {
   useRef,
   useCallback,
 } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import DatePicker from "react-datepicker";
 import "../styles/DatePicker.scss";
+import "../styles/CreateOrUpdateTodo.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import { AppDispatch, RootState } from "../store";
 import {
+  createTodo,
   setCurEditingTodoId,
   Todo,
   todoAdded,
 } from "../slices/todoSlice";
 import { getTomorrowDate } from "../util/getTomorrowDate";
 import { elementContainsTarget } from "../util/elementContainsTarget";
-
-const style = {
-  width: "100%",
-  height: "100%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-around",
-  fontSize: "18px",
-  borderBottom: ".5px solid #3334",
-  borderTop: ".5px solid #3334",
-};
+import { CreateTodo } from "../services/todoService";
 
 export type Props = {
   curPageId: string;
-  addTodo: (todo: Todo) => any;
   updateTodo: (todo: Todo) => any;
-  resetCurEditingTodoId: () => void;
   setShowTodoForm: Dispatch<SetStateAction<boolean>>;
   prevStartDate?: Date;
   prevName?: string;
   prevColor?: string;
   mode?: "create" | "update";
   curEditingTodoId: string | undefined;
+  isLoading: boolean,
+  userId: string
 };
 
 const CreateOrUpdateTodo: FC<Props> = ({
   curPageId,
-  addTodo,
   updateTodo,
   setShowTodoForm,
   prevStartDate,
   prevName = "",
   prevColor = "#000",
   mode = "create",
-  resetCurEditingTodoId,
   curEditingTodoId,
+  isLoading,
+  userId
 }) => {
+  const dispatch: AppDispatch = useDispatch();
+  const addTodo = (todo: Todo) => dispatch(todoAdded(todo));
+  const resetCurEditingTodoId = useCallback(
+    () => dispatch(setCurEditingTodoId("")),
+    [dispatch]
+  );
+
   const tomorrow = getTomorrowDate();
   const [startDate, setStartDate] = useState(
     prevStartDate ? prevStartDate : tomorrow
@@ -69,6 +68,7 @@ const CreateOrUpdateTodo: FC<Props> = ({
 
   const handleClickOutside = useCallback(
     (e: Event) => {
+      if (isLoading) return;
       const child =
         todoFormDivRef.current &&
         (todoFormDivRef.current.firstChild as HTMLElement);
@@ -80,6 +80,7 @@ const CreateOrUpdateTodo: FC<Props> = ({
         !target.classList.contains("react-datepicker__day")
       ) {
         if (modeIsCreate && !elementContainsTarget("#new-todo-icon", target)) {
+          // TODO handle handleClickOutside with refs
           setShowTodoForm(false);
         } else if (
           !modeIsCreate && target.id !== `edit-${curEditingTodoId}` &&
@@ -92,7 +93,7 @@ const CreateOrUpdateTodo: FC<Props> = ({
         }
       }
     },
-    [setShowTodoForm, curEditingTodoId, modeIsCreate, resetCurEditingTodoId]
+    [setShowTodoForm, isLoading, curEditingTodoId, modeIsCreate, resetCurEditingTodoId]
   );
 
   useEffect(() => {
@@ -108,12 +109,22 @@ const CreateOrUpdateTodo: FC<Props> = ({
     };
   }, [handleClickOutside]);
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const submitNewTodo = async (createParams: CreateTodo) => await dispatch(createTodo(createParams));
+
+  const handleSubmit = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    // TODO pass the returned todo's id
-    if (mode === "create")
-      addTodo({ color, name, id: "1332", due: startDate, pageId: curPageId, completed: false });
-    else if (curEditingTodoId) {
+    console.log('submit triggered')
+    if (!name) {
+      setShowTodoForm(false);
+      return;
+    }
+    if (mode === "create" && !isLoading) {
+      const todo = { color, name, due: startDate, pageId: curPageId, completed: false };
+      const resultAction = await submitNewTodo({ tpId: curPageId, userId, todo });
+      if (createTodo.fulfilled.match(resultAction)) {
+        addTodo({ color, name, id: resultAction.payload._id, due: startDate, pageId: curPageId, completed: false });
+      }
+    } else if (curEditingTodoId) {
       updateTodo({
         color,
         name,
@@ -129,7 +140,7 @@ const CreateOrUpdateTodo: FC<Props> = ({
 
   const SubmitButton = () => {
     return (
-      <button onClick={handleSubmit}>
+      <button className="submit" onClick={handleSubmit} disabled={isLoading}>
         {mode === "create" ? "Add" : "Update"}
       </button>
     );
@@ -137,7 +148,7 @@ const CreateOrUpdateTodo: FC<Props> = ({
 
   return (
     <div ref={todoFormDivRef} style={{ width: "100%", height: "100%" }}>
-      <form style={style}>
+      <form className="CreateOrUpdateTodo">
         <input
           type="text"
           name="name"
@@ -146,11 +157,13 @@ const CreateOrUpdateTodo: FC<Props> = ({
           value={name}
           onChange={(e) => setName(e.target.value)}
           ref={nameInputRef}
+          disabled={isLoading}
         />
         <DatePicker
           selected={startDate}
           onChange={(date: Date) => setStartDate(date)}
           minDate={tomorrow}
+          disabled={isLoading}
         />
         <input
           type="color"
@@ -158,6 +171,7 @@ const CreateOrUpdateTodo: FC<Props> = ({
           id="todo-color"
           value={color}
           onChange={(e) => setColor(e.target.value)}
+          disabled={isLoading}
         />
         <SubmitButton />
       </form>
@@ -168,13 +182,8 @@ const CreateOrUpdateTodo: FC<Props> = ({
 const mapStateToProps = (state: RootState) => ({
   curPageId: state.todo.curPageId,
   curEditingTodoId: state.todo.curEditingTodoId,
+  isLoading: state.todo.isLoading,
+  userId: state.auth.user ? state.auth.user.id : ''
 });
 
-const mapDispatchToProps = (dispatch: AppDispatch) => {
-  return {
-    addTodo: (todo: Todo) => dispatch(todoAdded(todo)),
-    resetCurEditingTodoId: () => dispatch(setCurEditingTodoId("")),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateOrUpdateTodo);
+export default connect(mapStateToProps)(CreateOrUpdateTodo);

@@ -80,7 +80,11 @@ const EditableText: FC<Props> = ({
       <div ref={editableWrapperRef} className={wrapperClass}>
         <input
           type="text"
-          value={showValueInUpperCase ? value.toUpperCase() : value}
+          value={
+            showValueInUpperCase
+              ? value.toUpperCase()
+              : value
+          }
           onChange={(e) => setValue(e.target.value)}
           className={inputClass ? inputClass : ""}
           onKeyDown={handleKeyDown}
