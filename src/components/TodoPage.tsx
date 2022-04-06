@@ -58,9 +58,6 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
       />
 
       <div className="TodoPage-header-icons">
-        {/* <div className="icon-wrapper">
-          <SearchIcon size={28} />
-        </div> */}
         <Search SearchIcon={SearchIcon} onChange={(val: string) => dispatch(setSearchString(val))}/>
         <div className="icon-wrapper">
           <NewTodoIcon
@@ -93,6 +90,12 @@ export const TodoPageHeader: FC<TodoPageHeaderProps> = ({
                   "Descending Name",
                   () => dispatch(updatePage({ userId, tpId: curPageId, todoPage: { sortKey: "name", sortOrder: "desc" }})),
                 ],
+                // [
+                //   "Clear Completed Todos",
+                //   () => {
+                //     const completedTodos = useSelector((state: RootState) => state.todo.byPageId[curPageId])
+                //   }
+                // ]
               ]}
               showPopover={showPopover}
               setShowPopover={setShowPopover}

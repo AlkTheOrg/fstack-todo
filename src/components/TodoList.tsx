@@ -19,7 +19,6 @@ const TodoList: FC<Props> = ({
   todos,
   showNewTodoForm,
   setShowNewTodoForm,
-  removeTodo,
   updateTodo,
   setCurEditingTodoId,
   curEditingTodoId,
@@ -33,7 +32,7 @@ const TodoList: FC<Props> = ({
           <CreateOrUpdateTodo setShowTodoForm={setShowNewTodoForm} updateTodo={updateTodo}/>
         </TodoWrapper>
       )}
-      {todos &&
+      {todos.length ?
         todos.map((todo, i) => {
           if (curEditingTodoId && curEditingTodoId === todo.id) {
             return (
@@ -52,12 +51,17 @@ const TodoList: FC<Props> = ({
           return (
             <TodoWrapper key={"todo" + i}>
               <Todo
-                removeTodo={() => removeTodo(todo)}
+                onClickTodo={() => updateTodo({ ...todo, completed: !todo.completed })}
                 {...todo}
               />
             </TodoWrapper>
           );
-        })}
+        }) : !showNewTodoForm && (
+          <div className="no-page-selected centered">
+            <h1>Couldn't find any todos in this page.</h1>
+            <h2>If you have a search filter, please clear or close it first.</h2>
+          </div>
+        )}
     </div>
   );
 };

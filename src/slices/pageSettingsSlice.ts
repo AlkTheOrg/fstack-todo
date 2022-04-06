@@ -5,7 +5,7 @@ export type PageSettingsState = {
 }
 
 export const initialState: PageSettingsState = {
-  isSidebarDetached: true
+  isSidebarDetached: false
 }
 
 export const pageSettingsSlice = createSlice({

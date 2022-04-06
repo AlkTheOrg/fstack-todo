@@ -1,11 +1,9 @@
 .Todo {
-  // background-color: lightseagreen;
   height: 100%;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // border-bottom: .2px solid black;
   font-size: 18px;
 
   main {
@@ -34,12 +32,13 @@
     }
   }
 
-  &-due {
-    font-weight: 500;
+  &.completed {
+    opacity: 50%;
   }
 
   &-due {
     display: flex;
+    font-weight: 500;
 
     .icon-wrapper {
       display: flex;

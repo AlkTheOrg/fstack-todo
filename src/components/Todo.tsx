@@ -7,7 +7,7 @@ import { IconType } from "react-icons";
 import { useDispatch } from 'react-redux';
 
 export interface Props extends TodoType {
-  removeTodo: () => any;
+  onClickTodo: () => any;
   EditIcon?: IconType
 }
 
@@ -17,8 +17,8 @@ const Todo: React.FC<Props> = ({
   id,
   name,
   pageId,
-  removeTodo,
-  children,
+  onClickTodo,
+  completed,
   EditIcon = FiEdit2
 }) => {
   const [nameOnHover, setNameOnHover] = useState(false);
@@ -40,7 +40,7 @@ const Todo: React.FC<Props> = ({
 
   return (
     <div
-      className="Todo"
+      className={"Todo" + (completed ? " completed" : "")}
       id={"todo-"+id}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -48,15 +48,15 @@ const Todo: React.FC<Props> = ({
       <main>
         <div
           className="check"
-          style={{ borderColor: color }}
-          onClick={removeTodo}
+          style={{ borderColor: completed ? "green" : color }}
+          onClick={onClickTodo}
           role="checkbox"
           aria-checked="false"
           aria-label="Mark todo as done"
         ></div>
         <span
           className="Todo-name"
-          style={{ color: nameOnHover ? color : "black" }}
+          style={{ color: completed ? "green" : nameOnHover ? color : "black" }}
         >
           {name}
         </span>
@@ -65,7 +65,7 @@ const Todo: React.FC<Props> = ({
         {isHovering && <div className="icon-wrapper edit-todo-icon" >
           <EditIcon size={18} onClick={() => dispatch(setCurEditingTodoId(id))} id={"edit-"+id}/>
         </div>}
-        {todoIsInFuture ? moment(due).fromNow(true) : "Due"}
+        {todoIsInFuture ? moment(due).fromNow(true) : <p style={{color: "#BA0010"}}>Due</p>}
       </span>
     </div>
   );
