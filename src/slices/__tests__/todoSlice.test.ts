@@ -18,12 +18,27 @@ import reducer, {
   updatePage,
   removeTodo,
   updateTodo,
-  createTodo
+  createTodo,
+  Page,
 } from "../todoSlice";
 
 const pageOneTodos: Todo[] = [
-  { id: "2", name: "example2", color: "green", pageId: "1", due: new Date(Date.now()), completed: false },
-  { id: "3", name: "example3", color: "brown", pageId: "1", due: new Date(Date.now()), completed: false },
+  {
+    id: "2",
+    name: "example2",
+    color: "green",
+    pageId: "1",
+    due: new Date(Date.now()),
+    completed: false,
+  },
+  {
+    id: "3",
+    name: "example3",
+    color: "brown",
+    pageId: "1",
+    due: new Date(Date.now()),
+    completed: false,
+  },
 ];
 const newTodo: Todo = {
   color: "red",
@@ -31,7 +46,7 @@ const newTodo: Todo = {
   id: "12",
   name: "do it",
   pageId: "0",
-  completed: false
+  completed: false,
 };
 
 it("should return the initial state", () => {
@@ -45,7 +60,7 @@ it("should take a todos Record and set it as new state", () => {
     pages: {},
     isLoading: false,
     searchString: "",
-    curEditingTodoId: ""
+    curEditingTodoId: "",
   };
   const newState: TodosState = {
     ...previousState,
@@ -57,8 +72,9 @@ it("should take a todos Record and set it as new state", () => {
 it("should add todo to an existing page", () => {
   const previousState = initialState;
   const pageId = newTodo.pageId;
-  const pageExists = previousState.byPageId.length && previousState.byPageId[pageId]
-  const toBeDestructed = pageExists ? previousState.byPageId[pageId] : []
+  const pageExists =
+    previousState.byPageId.length && previousState.byPageId[pageId];
+  const toBeDestructed = pageExists ? previousState.byPageId[pageId] : [];
 
   expect(reducer(previousState, todoAdded(newTodo))).toEqual({
     ...previousState,
@@ -77,7 +93,7 @@ it("should add todo to a new page", () => {
     pages: {},
     isLoading: false,
     searchString: "",
-    curEditingTodoId: ""
+    curEditingTodoId: "",
   };
 
   expect(previousState.byPageId[newTodo.pageId]).toBe(undefined);
@@ -99,7 +115,7 @@ it("should remove an existing todo", () => {
     byPageId: {
       "0": [newTodo],
     },
-    curEditingTodoId: ""
+    curEditingTodoId: "",
   };
   expect(reducer(previousState, todoRemoved(newTodo))).toEqual({
     ...previousState,
@@ -119,7 +135,7 @@ it("should not update the state while removing an unexistent todo", () => {
     byPageId: {
       "0": [],
     },
-    curEditingTodoId: ""
+    curEditingTodoId: "",
   };
   expect(reducer(previousState, todoRemoved(newTodo))).toEqual(previousState);
 });
@@ -133,7 +149,7 @@ it("should update an existing todo", () => {
     byPageId: {
       "0": [newTodo],
     },
-    curEditingTodoId: ""
+    curEditingTodoId: "",
   };
   const updatedTodo = { ...newTodo, id: "12", name: "dont do it" };
   expect(reducer(previousState, todoUpdated(updatedTodo))).toEqual({
@@ -154,14 +170,15 @@ it("should not update the state while updating an unexistent todo", () => {
     byPageId: {
       "0": [],
     },
-    curEditingTodoId: ""
+    curEditingTodoId: "",
   };
   const updatedTodo = { ...newTodo, id: "12", name: "dont do it" };
-  expect(reducer(previousState, todoUpdated(updatedTodo))).toEqual(previousState);
+  expect(reducer(previousState, todoUpdated(updatedTodo))).toEqual(
+    previousState
+  );
 });
 
 it("should remove an existing page", () => {
-  
   const previoustState: TodosState = {
     pages: {},
     isLoading: false,
@@ -171,9 +188,9 @@ it("should remove an existing page", () => {
       ...initialState.byPageId,
       [pageOneTodos[0].pageId]: pageOneTodos,
     },
-    curEditingTodoId: ""
+    curEditingTodoId: "",
   };
-  
+
   expect(reducer(previoustState, pageRemoved(pageOneTodos[0].pageId))).toEqual(
     initialState
   );
@@ -183,5 +200,74 @@ it("should update the current page id", () => {
   expect(reducer(initialState, setCurPage("125"))).toEqual({
     ...initialState,
     curPageId: "125",
+  });
+});
+
+it("should reset the state to initial state", () => {
+  const previoustState: TodosState = {
+    pages: { "0": { name: "name", sortKey: "due", sortOrder: "asc" } },
+    isLoading: true,
+    searchString: "fdsafdasfdsa",
+    curPageId: "0",
+    byPageId: {
+      [pageOneTodos[0].pageId]: pageOneTodos,
+    },
+    curEditingTodoId: "0",
+  };
+
+  expect(reducer(previoustState, reset())).toEqual(initialState);
+});
+
+it("should add a new page", () => {
+  const page: Page = { name: "name", sortKey: "due", sortOrder: "asc" };
+
+  expect(
+    reducer(
+      initialState,
+      pageAdded({
+        ...page,
+        id: "0",
+      })
+    )
+  ).toEqual({
+    ...initialState,
+    pages: { "0": page },
+    byPageId: {
+      "0": [],
+    },
+    curPageId: "0",
+  });
+});
+
+it("should update an existing page", () => {
+  const page: Page = { name: "name", sortKey: "due", sortOrder: "asc" };
+  const updatedPage: Page = {
+    name: "name2",
+    sortKey: "name",
+    sortOrder: "desc",
+  };
+  const previousState: TodosState = {
+    ...initialState,
+    pages: { "0": page },
+    byPageId: {
+      "0": [],
+    },
+  };
+
+  expect(reducer(previousState, pageUpdated(["0", updatedPage]))).toEqual({
+    ...previousState,
+    pages: { "0": updatedPage },
+  });
+});
+
+it("should not update an non existent page", () => {
+  expect(reducer(initialState, pageUpdated(["0", {}]))).toEqual(initialState);
+});
+
+it("should set the search string", () => {
+  const searchString = "my search string";
+  expect(reducer(initialState, setSearchString(searchString))).toEqual({
+    ...initialState,
+    searchString,
   });
 });

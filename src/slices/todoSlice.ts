@@ -207,7 +207,9 @@ export const todoSlice = createSlice({
     },
     pageUpdated: (state, action: PayloadAction<[string, Partial<Page>]>) => {
       const [pageId, partialPage] = action.payload;
-      state.pages[pageId] = { ...state.pages[pageId], ...partialPage };
+      if (state.pages[pageId]) {
+        state.pages[pageId] = { ...state.pages[pageId], ...partialPage };
+      }
     },
     setCurPage: (state, action: PayloadAction<string>) => {
       state.curPageId = action.payload;
