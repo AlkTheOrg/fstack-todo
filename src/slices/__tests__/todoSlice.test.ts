@@ -1,4 +1,12 @@
-import { Action } from "@reduxjs/toolkit";
+import { Action, configureStore } from "@reduxjs/toolkit";
+import todoService, {
+  CreateTodo,
+  CreateTodoPage,
+  DeleteTodo,
+  DeleteTodoPage,
+  TodoPageReponse,
+  TodoResponse,
+} from "../../services/todoService";
 import reducer, {
   setTodos,
   todoAdded,
@@ -13,11 +21,9 @@ import reducer, {
   pageAdded,
   pageUpdated,
   setSearchString,
-  removePage, //Thunks
+  removePage, //Thunk tests
   createPage,
-  updatePage,
   removeTodo,
-  updateTodo,
   createTodo,
   Page,
 } from "../todoSlice";
@@ -270,4 +276,105 @@ it("should set the search string", () => {
     ...initialState,
     searchString,
   });
+});
+
+// async tests
+it("should dispatch createPage", async () => {
+  const page: Page = { name: "name", sortKey: "due", sortOrder: "asc" };
+  const toBeCreatedPage: CreateTodoPage = { todoPage: page, userId: "0" };
+  const spy = jest.spyOn(todoService, "createTodoPage");
+  const mockReponse: TodoPageReponse = {
+    __v: 0,
+    _id: "0",
+    name: "name",
+    sortKey: "due",
+    sortOrder: "asc",
+    todos: [],
+  };
+  spy.mockReturnValue(Promise.resolve(mockReponse));
+
+  const store = configureStore({
+    reducer: function (state: TodosState = initialState, action) {
+      switch (action.type) {
+        case "todoPage/create/fulfilled":
+          return action.payload; // Returning the payload to test if it arrived with no problem
+        default:
+          return state;
+      }
+    },
+  });
+  await store.dispatch(createPage(toBeCreatedPage));
+  expect(spy).toBeCalledWith(toBeCreatedPage);
+  expect(store.getState()).toEqual(mockReponse);
+});
+
+it("should dispatch createTodo", async () => {
+  const todo: Todo = pageOneTodos[0];
+  const toBeCreatedTodo: CreateTodo = { userId: "0", todo, tpId: "0 " };
+  const spy = jest.spyOn(todoService, "createTodo");
+  const mockResponse: TodoResponse = {
+    __v: 0,
+    _id: "0",
+    name: todo.name,
+    due: todo.due.toString(),
+    color: todo.color,
+    completed: false,
+  };
+  spy.mockReturnValue(Promise.resolve(mockResponse));
+  const store = configureStore({
+    reducer: function (state: TodosState = initialState, action) {
+      switch (action.type) {
+        case "todo/create/fulfilled":
+          return action.payload;
+        default:
+          return state;
+      }
+    },
+  });
+  await store.dispatch(createTodo(toBeCreatedTodo));
+  expect(spy).toBeCalledWith(toBeCreatedTodo);
+  expect(store.getState()).toEqual(mockResponse);
+});
+
+it("should dispatch removeTodo", async () => {
+  const todo: Todo = pageOneTodos[0];
+  const toBeRemovedTodo: DeleteTodo = { userId: "0", todo, tpId: "0 " };
+  const spy = jest.spyOn(todoService, "deleteTodo");
+  spy.mockReturnValue(Promise.resolve(true));
+
+  const store = configureStore({
+    reducer: function (state: TodosState = initialState, action) {
+      switch (action.type) {
+        case "todo/remove/fulfilled":
+          return action.payload;
+        default:
+          return state;
+      }
+    },
+  });
+
+  await store.dispatch(removeTodo(toBeRemovedTodo));
+  expect(spy).toBeCalledTimes(1);
+  expect(store.getState()).toEqual(true);
+});
+
+it("should dispatch removePage", async () => {
+  const toBeRemovedPage: DeleteTodoPage = { userId: "0", tpId: "0 " };
+  const spy = jest.spyOn(todoService, "deleteTodoPage");
+  spy.mockReturnValue(Promise.resolve(true));
+
+  const store = configureStore({
+    reducer: function (state: TodosState = initialState, action) {
+      switch (action.type) {
+        case "todoPage/remove/fulfilled":
+          return action.payload;
+        default:
+          return state;
+      }
+    },
+  });
+
+  await store.dispatch(removePage(toBeRemovedPage));
+  expect(spy).toBeCalledTimes(1);
+  expect(store.getState()).toEqual(true);
 });

@@ -13,7 +13,7 @@ export type TodoPageReponse = {
   __v: number;
 };
 
-type TodoResponse = {
+export type TodoResponse = {
   _id: string;
   name: string;
   due: string;
