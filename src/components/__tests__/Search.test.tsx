@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, prettyDOM } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { FiSearch } from "react-icons/fi";
 import { Provider } from "react-redux";
 import { setSearchString } from "../../slices/todoSlice";
