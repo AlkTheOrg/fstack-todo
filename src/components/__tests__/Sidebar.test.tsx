@@ -1,12 +1,16 @@
 import { fireEvent, prettyDOM, render, screen } from "@testing-library/react";
+import { Provider } from "react-redux";
 import Sidebar, { Props, defaultProps } from "../side/Sidebar";
+import { store } from '../../store/index';
 
 describe("<Sidebar />", () => {
   const renderSidebar = (
     props: Props = defaultProps,
     children?: React.ReactNode
   ) => {
-    return render(<Sidebar {...props}>{children}</Sidebar>);
+    return render(<Provider store={store}>
+      <Sidebar {...props}>{children}</Sidebar>
+    </Provider>);
   };
   /* eslint-disable testing-library/no-node-access */
 
@@ -17,13 +21,12 @@ describe("<Sidebar />", () => {
     expect(sidebar.classList).toContain("abcd");
   });
 
-  //TODO Uncomment below after finishing the design of siebar
-  // it("should be detached amd be invisible by default", () => {
-  //   renderSidebar();
-  //   const sidebar = screen.getByRole("complementary");
-  //   expect(sidebar.classList).toContain("isDetached");
-  //   expect(sidebar.classList).not.toContain("isVisible");
-  // });
+  it("should be attached and be visible by default", () => {
+    renderSidebar();
+    const sidebar = screen.getByRole("complementary");
+    expect(sidebar.classList).not.toContain("isDetached");
+    expect(sidebar.classList).toContain("isVisible");
+  });
 
   // should render the passed title
   it("should render the passed title", () => {
