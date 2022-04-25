@@ -96,6 +96,7 @@ const Search: FC<Props> = ({
           onClick={() => setInputIsOpen((prev) => !prev)}
           className="icon"
           size={28}
+          data-testid="search-icon"
         />
       </div>
       {isSubmittable && (
