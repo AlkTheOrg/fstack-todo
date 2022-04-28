@@ -6,6 +6,7 @@ import { AppDispatch, RootState } from "../store";
 import "../styles/Form.scss";
 import todoService, { TodoPageReponse } from "../services/todoService";
 import { pageAdded, todoAdded } from "../slices/todoSlice";
+import Spinner from "../components/Spinner";
 
 interface Props {}
 
@@ -92,7 +93,13 @@ export const Login: React.FC<Props> = () => {
             required
             disabled={isLoading}
           />
-          <button type="submit" id="submit" disabled={isLoading}>Login</button>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <button type="submit" id="submit" disabled={isLoading}>
+              Login
+            </button>
+          )}
         </form>
       </div>
     </div>

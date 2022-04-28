@@ -4,6 +4,7 @@ import { register, reset, setUser } from "../slices/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import "../styles/Form.scss";
+import Spinner from "../components/Spinner";
 
 interface Props {}
 
@@ -73,7 +74,13 @@ export const Signup: React.FC<Props> = (props) => {
             maxLength={30}
             disabled={isLoading}
           />
-          <button type="submit" disabled={isLoading}>Signup</button>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <button type="submit" disabled={isLoading}>
+              Signup
+            </button>
+          )}
         </form>
       </div>
     </div>
