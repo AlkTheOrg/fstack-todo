@@ -2,7 +2,8 @@ import axios from "axios";
 import { SortKey, SortOrder, Page, Todo } from "../slices/todoSlice";
 import { getToken } from "../util/authHelpers";
 
-const API_URL = "http://localhost:5000";
+// const API_URL = "http://localhost:5000";
+const API_URL = "https://fstack-todo-backend.herokuapp.com";
 
 export type TodoPageReponse = {
   _id: string;

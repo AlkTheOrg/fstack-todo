@@ -3,7 +3,8 @@ import { UnregisteredUser, UserLogin } from "../slices/authSlice";
 import { removeToken, setToken } from "../util/authHelpers";
 import { getAxiosConfig } from "./todoService";
 
-const API_URL = "http://localhost:5000";
+// const API_URL = "http://localhost:5000";
+const API_URL = "https://fstack-todo-backend.herokuapp.com";
 
 type UserResponse = {
   id: string;
