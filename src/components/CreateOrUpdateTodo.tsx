@@ -22,6 +22,7 @@ import {
 import { getTomorrowDate } from "../util/getTomorrowDate";
 import { elementContainsTarget } from "../util/elementContainsTarget";
 import { CreateTodo } from "../services/todoService";
+import { IoCloseOutline } from 'react-icons/io5';
 
 export type Props = {
   curPageId: string;
@@ -66,6 +67,11 @@ const CreateOrUpdateTodo: FC<Props> = ({
 
   const modeIsCreate = mode === "create";
 
+  const cancelCreatOrUpdate = useCallback(() => {
+    setShowTodoForm(false);
+    resetCurEditingTodoId();
+  }, [resetCurEditingTodoId, setShowTodoForm]);
+
   const handleClickOutside = useCallback(
     (e: Event) => {
       if (isLoading) return;
@@ -88,12 +94,11 @@ const CreateOrUpdateTodo: FC<Props> = ({
           curEditingTodoId
           // document.querySelector(`#todo-${curEditingTodoId} .edit-todo-icon`)
         ) {
-          setShowTodoForm(false);
-          resetCurEditingTodoId();
+          cancelCreatOrUpdate();
         }
       }
     },
-    [setShowTodoForm, isLoading, curEditingTodoId, modeIsCreate, resetCurEditingTodoId]
+    [setShowTodoForm, isLoading, curEditingTodoId, modeIsCreate, cancelCreatOrUpdate]
   );
 
   useEffect(() => {
@@ -138,6 +143,12 @@ const CreateOrUpdateTodo: FC<Props> = ({
     setShowTodoForm(false);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Escape') {
+      cancelCreatOrUpdate();
+    };
+  }
+
   const SubmitButton = () => {
     return (
       <button className="submit" onClick={handleSubmit} disabled={isLoading}>
@@ -148,7 +159,13 @@ const CreateOrUpdateTodo: FC<Props> = ({
 
   return (
     <div ref={todoFormDivRef} style={{ width: "100%", height: "100%" }}>
-      <form className="CreateOrUpdateTodo">
+      <form className="CreateOrUpdateTodo" onKeyDown={handleKeyDown}>
+        <div
+          className="icon-wrapper"
+          onClick={cancelCreatOrUpdate}
+        >
+          <IoCloseOutline size={25}/>
+        </div>
         <input
           type="text"
           name="name"

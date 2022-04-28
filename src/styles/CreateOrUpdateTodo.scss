@@ -35,4 +35,18 @@
       background-color: #1cc443;
     }
   }
+
+  .icon-wrapper {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transform: scale(1);
+    // transition: transform 0.1s;
+    color: rgba(165, 26, 26, 0.568);
+
+    &:hover {
+      transform: scale(1.1);
+      color: rgba(199, 22, 22, 0.733);
+    }
+  }
 }
