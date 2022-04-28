@@ -20,6 +20,7 @@ const TodoList: FC<Props> = ({
   showNewTodoForm,
   setShowNewTodoForm,
   updateTodo,
+  removeTodo,
   setCurEditingTodoId,
   curEditingTodoId,
 }) => {
@@ -53,6 +54,7 @@ const TodoList: FC<Props> = ({
             <TodoWrapper key={"todo" + i}>
               <Todo
                 onClickTodo={() => updateTodo({ ...todo, completed: !todo.completed })}
+                onDelete={removeTodo}
                 {...todo}
               />
             </TodoWrapper>
