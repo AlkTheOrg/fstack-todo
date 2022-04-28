@@ -1,4 +1,6 @@
 # Fullstack Todo App with Authentication
+![example workflow](https://github.com/AlkTheOrg/fstack-todo/actions/workflows/node.js.yml/badge.svg)
+
 [Live Demo](https://fstack-toodo.netlify.app) (You can use `user` for username and `password` for password for a quick tour)
 First login may take some time as backend on heroku requires some time to wake up.
 
