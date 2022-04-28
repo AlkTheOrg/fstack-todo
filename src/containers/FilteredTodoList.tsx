@@ -28,8 +28,9 @@ const getFilteredTodos: (
     ? sortByKey(records[pageId], pages[pageId].sortKey, pages[pageId].sortOrder)
     : [];
   if (!searchString) return foundPages;
+  const loweredSearchStr = searchString.toLocaleLowerCase();
   return foundPages.filter((foundPage) =>
-    foundPage.name.includes(searchString)
+    foundPage.name.toLowerCase().includes(loweredSearchStr)
   );
 };
 
