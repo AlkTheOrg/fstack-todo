@@ -12,6 +12,7 @@ const Profile = () => {
   const [username, setUsername] = useState(user ? user.username : '');
   const [password, setPassword] = useState('');
   const dispatch: AppDispatch = useDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { isLoading, isError, message } = useSelector((state: RootState) => state.auth);
 
   const navigate = useNavigate();

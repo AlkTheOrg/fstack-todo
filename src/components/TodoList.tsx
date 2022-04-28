@@ -23,6 +23,7 @@ const TodoList: FC<Props> = ({
   setCurEditingTodoId,
   curEditingTodoId,
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showEditingTodo, setShowEditingTodo] = useState(false);
 
   return (

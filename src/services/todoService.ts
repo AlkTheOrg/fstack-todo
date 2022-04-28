@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SortKey, SortOrder, Page, PageWithId, Todo } from "../slices/todoSlice";
+import { SortKey, SortOrder, Page, Todo } from "../slices/todoSlice";
 import { getToken } from "../util/authHelpers";
 
 const API_URL = "http://localhost:5000";

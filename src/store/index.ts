@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import todosReducer from "../slices/todoSlice";
 import authReducer from "../slices/authSlice";
 import pageSettingsReducer from "../slices/pageSettingsSlice";

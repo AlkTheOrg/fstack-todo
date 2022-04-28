@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setUser, UnregisteredUser, User, UserLogin } from "../slices/authSlice";
+import { UnregisteredUser, UserLogin } from "../slices/authSlice";
 import { removeToken, setToken } from "../util/authHelpers";
 import { getAxiosConfig } from "./todoService";
 

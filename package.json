@@ -32,6 +32,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "deploy-backend": "git subtree push --prefix api heroku main",
+    "logs-backend": "heroku logs --tail",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
