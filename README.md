@@ -3,7 +3,7 @@
 
 [Live Demo](https://fstack-toodo.netlify.app) (You can use `user` for username and `password` for password for a quick tour)
 
-First login may take some time as backend on heroku requires some time to wake up.
+First login may take some time as backend on heroku requires few seconds to wake up.
 
 ## Figma Design:
 ![alt text](images/fstack_todo_figma_final.png)

@@ -199,8 +199,8 @@ export const todoSlice = createSlice({
       if (state.byPageId[action.payload])
         delete state.byPageId[action.payload];
       if (state.curPageId === action.payload) {
-        state.curPageId = "";
-        //TODO either implement previous page state or assign this to the first page
+        const keysOfPages = Object.keys(state.pages);
+        state.curPageId = keysOfPages.length > 0 ? keysOfPages[0] : '';
       }
       if (state.pages[action.payload])
         delete state.pages[action.payload];
