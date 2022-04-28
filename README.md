@@ -9,7 +9,7 @@ First login may take some time as backend on heroku requires some time to wake u
 
 ## Frontend
 - TypeScript
-- React, Redux, React Router
+- React, Redux, React Router, Redux Persist
 - Reusable components
 - Storybook integration for component documentation
 - Design first approach with Figma
