@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { store } from "./store"
 import { Provider } from "react-redux";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Login } from './pages/Login';
 import Signup from './pages/Signup';
 import Navbar from './components/Navbar';
@@ -12,7 +12,7 @@ import Profile from './pages/Profile';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <HashRouter>
+      <BrowserRouter>
         <Navbar />
         <Routes>
           <Route path="/" element={<App />} />
@@ -21,7 +21,7 @@ ReactDOM.render(
           <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<h1>no match</h1>} />
         </Routes>
-      </HashRouter>
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
