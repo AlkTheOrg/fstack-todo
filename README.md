@@ -1,10 +1,6 @@
 # Fullstack Todo App with Authentication
 ![example workflow](https://github.com/AlkTheOrg/fstack-todo/actions/workflows/node.js.yml/badge.svg)
 
-[Live Demo](https://fstack-toodo.netlify.app) (You can use `user` for username and `password` for password for a quick tour)
-
-First login may take some time as backend on heroku requires few seconds to wake up.
-
 ## Figma Design:
 ![alt text](images/fstack_todo_figma_final.png)
 
@@ -25,4 +21,4 @@ First login may take some time as backend on heroku requires few seconds to wake
 - Mongoose and Express
 - Authentication and authorization
 - Bcrypt, JWT and dotenv
-- Deployed to Heroku
+- ~Deployed to Heroku~ (App is removed due to free version policy update of Heroku)
